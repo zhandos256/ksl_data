@@ -2,15 +2,25 @@
   "intervalSeconds": 5,
   "banners": [
     {
-      "enabled": true,
-      "tag": "Реклама",
-      "title": "Курсы по товарному бизнесу 500+",
-      "description": "Разместите вашу рекламу на 1000+ селлеров Kaspi",
+      "tag": "Сервис",
+      "title": "Фулфилмент Алматы",
+      "description": "Заберем товар сегодня",
       "url": "https://t.me/zhandos256",
-      "theme": {
-        "from": "#0056D6",
-        "to": "#00A3D7"
-      }
+      "theme": { "from": "#0A84FF", "to": "#0056B3" }
+    },
+    {
+      "tag": "Реклама",
+      "title": "Продвижение Kaspi",
+      "description": "Выведем в топ за 3 дня",
+      "url": "https://t.me/zhandos256",
+      "theme": { "from": "#FF3B30", "to": "#C1271A" }
+    },
+    {
+      "tag": "Курсы",
+      "title": "Пак 5000 курсов",
+      "description": "Доступ за 8500₸",
+      "url": "https://t.me/zhandos256",
+      "theme": { "from": "#34C759", "to": "#0A8F3C" }
     }
   ]
 }
