@@ -4,17 +4,6 @@
     {
       "enabled": true,
       "tag": "Реклама",
-      "title": "Здесь может быть ваша реклама",
-      "description": "Разместите вашу рекламу на 1000+ селлеров Kaspi",
-      "url": "https://t.me/digitalcraftzman",
-      "theme": {
-        "from": "#808080",
-        "to": "#383A3E"
-      }
-    },
-    {
-      "enabled": true,
-      "tag": "Реклама",
       "title": "Курсы по товарному бизнесу 500+",
       "description": "Разместите вашу рекламу на 1000+ селлеров Kaspi",
       "url": "https://t.me/zhandos256",
