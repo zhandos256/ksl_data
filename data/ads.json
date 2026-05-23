@@ -13,15 +13,15 @@
       }
     },
     {
-  "enabled": true,
-  "tag": "реклама",
-  "title": "Курсы по товарному бизнесу 500+",
-  "description": "Разместите вашу рекламу на 1000+ селлеров Kaspi",
-  "url": "https://t.me/zhandos256",
-  "theme": {
-    "from": "#0056D6",
-    "to": "#00A3D7"
-  }
-}
+      "enabled": true,
+      "tag": "Реклама",
+      "title": "Курсы по товарному бизнесу 500+",
+      "description": "Разместите вашу рекламу на 1000+ селлеров Kaspi",
+      "url": "https://t.me/zhandos256",
+      "theme": {
+        "from": "#0056D6",
+        "to": "#00A3D7"
+      }
+    }
   ]
 }
