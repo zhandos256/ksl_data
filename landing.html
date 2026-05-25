@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Kaspi Seller Lens (Unofficial)</title>
-  <meta name="description" content="Панель для продавцов Kaspi: прибыль, расходы, история товаров и накладные.">
+  <title>Kaspi Seller Lens (Unofficial) - расчёты для продавцов Kaspi</title>
+  <meta name="description" content="Прибыль товара, расходы, история и печать накладных прямо на страницах Kaspi.">
   <link rel="icon" type="image/png" href="icons/icon32.png">
   <style>
     :root {
@@ -12,400 +12,901 @@
       --page: #f8f9fa;
       --surface: #fff;
       --ink: #111;
-      --text: #24282b;
-      --muted: #667078;
-      --line: #e2e6e9;
+      --text: #444;
+      --muted: #666;
+      --line: rgba(0, 0, 0, .12);
+      --soft-line: #e4e7e9;
       --control: #eceff1;
-      --success: #238441;
-      --danger: #c3322c;
-      --font: Inter, "Segoe UI", Arial, sans-serif;
+      --control-hover: #e3e7ea;
+      --success: #1a7f37;
+      --danger: #b42318;
+      --panel-shadow: 0 18px 46px rgba(0, 0, 0, .2);
+      --card-shadow: 0 5px 16px rgba(0, 0, 0, .075);
+      --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --content: 1180px;
     }
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      color: var(--text);
       background: var(--page);
+      color: var(--text);
       font-family: var(--font);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
     }
     a { color: inherit; text-decoration: none; }
-    .wrap {
-      width: min(900px, calc(100% - 40px));
+    svg { display: block; }
+    .container {
+      width: min(var(--content), calc(100% - 48px));
       margin: 0 auto;
     }
-    header {
-      height: 64px;
-      border-bottom: 1px solid var(--line);
+    .site-header {
+      position: relative;
+      z-index: 5;
+      border-bottom: 1px solid var(--soft-line);
       background: var(--page);
     }
     .header-inner {
-      height: 100%;
+      min-height: 66px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 20px;
+      gap: 26px;
     }
     .brand {
+      min-width: 0;
       display: flex;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       color: var(--ink);
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 760;
     }
     .brand img {
-      width: 30px;
-      height: 30px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
     }
-    nav {
+    .top-nav {
       display: flex;
       align-items: center;
-      gap: 22px;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 550;
-    }
-    nav a:hover { color: var(--ink); }
-    .hero {
-      padding: 74px 0 62px;
-      text-align: center;
-    }
-    .label {
+      gap: 26px;
       color: var(--muted);
       font-size: 13px;
       font-weight: 600;
     }
-    h1 {
-      max-width: 690px;
-      margin: 18px auto 16px;
-      color: var(--ink);
-      font-size: clamp(39px, 6vw, 58px);
-      font-weight: 780;
-      line-height: 1.06;
-      letter-spacing: 0;
-    }
-    .lead {
-      max-width: 540px;
-      margin: 0 auto;
-      color: var(--muted);
-      font-size: 17px;
-      line-height: 1.6;
-    }
-    .actions {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 9px;
-      margin-top: 29px;
-    }
-    .button {
-      height: 42px;
+    .top-nav a:hover, .footer-links a:hover { color: var(--ink); }
+    .top-contact {
+      height: 38px;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 0 19px;
+      padding: 0 16px;
       border: 1px solid var(--ink);
       border-radius: 8px;
-      color: #fff;
       background: var(--ink);
-      font-size: 14px;
-      font-weight: 680;
-    }
-    .button.secondary {
-      color: var(--ink);
-      background: transparent;
-      border-color: var(--line);
-    }
-    .button:hover { opacity: .85; }
-    .preview {
-      width: min(520px, 100%);
-      margin: 58px auto 0;
-      padding: 10px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: #f3f5f6;
-      box-shadow: 0 16px 38px rgba(17, 17, 17, .06);
-      text-align: left;
-    }
-    .metric {
-      padding: 22px 23px;
-      border-radius: 14px;
       color: #fff;
-      background: #111;
     }
-    .metric-label {
-      color: rgba(255,255,255,.68);
-      font-size: 13px;
-      font-weight: 550;
-    }
-    .revenue {
-      margin: 10px 0 17px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(255,255,255,.17);
-      font-size: clamp(28px, 5.7vw, 34px);
-      font-weight: 750;
-      font-variant-numeric: tabular-nums;
-    }
-    .results {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 13px 18px;
-    }
-    .results span {
-      display: block;
-      margin-bottom: 4px;
-      color: rgba(255,255,255,.73);
-      font-size: 12px;
-      font-weight: 550;
-    }
-    .results b {
-      font-size: 17px;
-      font-weight: 700;
-      font-variant-numeric: tabular-nums;
-      white-space: nowrap;
-    }
-    .green { color: #34ce68; }
-    .red { color: #ff5964; }
-    .item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 8px;
-      padding: 13px 16px;
-      border-radius: 12px;
+    .top-contact:hover { color: #fff; background: #292929; }
+
+    .hero {
+      position: relative;
+      min-height: min(736px, calc(100svh - 82px));
+      overflow: hidden;
+      border-bottom: 1px solid var(--soft-line);
       background: var(--surface);
     }
-    .item img {
-      width: 40px;
-      height: 40px;
-      border-radius: 7px;
+    .hero-inner {
+      min-height: inherit;
+      position: relative;
     }
-    .item strong {
-      display: block;
-      color: var(--ink);
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      width: min(510px, 100%);
+      padding-top: clamp(72px, 11vh, 110px);
+    }
+    .overline {
+      margin: 0 0 20px;
+      color: var(--muted);
       font-size: 13px;
       font-weight: 650;
     }
-    .item small {
+    h1 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(45px, 5.3vw, 62px);
+      font-weight: 790;
+      line-height: 1.03;
+      letter-spacing: 0;
+    }
+    .unofficial {
+      display: block;
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: .4em;
+      font-weight: 620;
+    }
+    .hero-lead {
+      max-width: 455px;
+      margin: 25px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.55;
+    }
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 34px;
+    }
+    .button {
+      height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 22px;
+      border: 1px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 720;
+      transition: background .16s ease, border-color .16s ease;
+    }
+    .button:hover { background: #292929; border-color: #292929; }
+    .button.secondary {
+      border-color: var(--soft-line);
+      background: var(--surface);
+      color: var(--ink);
+    }
+    .button.secondary:hover {
+      border-color: rgba(17,17,17,.16);
+      background: var(--control);
+    }
+    .purpose {
+      max-width: 406px;
+      margin-top: 39px;
+      padding-top: 18px;
+      border-top: 1px solid var(--soft-line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.56;
+    }
+    .purpose b {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 730;
+      text-transform: uppercase;
+    }
+
+    .store-scene {
+      position: absolute;
+      top: 50px;
+      right: -152px;
+      width: 720px;
+      height: 618px;
+      border: 1px solid var(--soft-line);
+      border-radius: 14px 0 0 14px;
+      background: #fff;
+      overflow: hidden;
+    }
+    .store-header {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 27px;
+      padding: 0 22px;
+      border-bottom: 1px solid #edf0f1;
+      color: #9ca2a7;
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .store-logo {
+      color: #d9dddf;
+      font-size: 17px;
+      font-weight: 770;
+    }
+    .store-search {
+      flex: 1;
+      height: 28px;
+      border: 1px solid #edf0f1;
+      border-radius: 5px;
+      background: #fafbfb;
+    }
+    .store-crumbs {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 0 24px;
+      border-bottom: 1px solid #edf0f1;
+      color: #a1a6aa;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .store-body {
+      display: grid;
+      grid-template-columns: 233px 1fr;
+      height: calc(100% - 98px);
+    }
+    .product-visual {
+      position: relative;
+      border-right: 1px solid #edf0f1;
+      background: #fff;
+    }
+    .phone {
+      position: absolute;
+      top: 83px;
+      left: 68px;
+      width: 94px;
+      height: 192px;
+      border: 4px solid #dadde0;
+      border-radius: 20px;
+      background: linear-gradient(160deg, #eef1f2 4%, #dadfe1 48%, #fafafa 85%);
+    }
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 7px;
+      left: 29px;
+      width: 28px;
+      height: 8px;
+      border-radius: 5px;
+      background: #d1d4d7;
+    }
+    .product-page {
+      padding: 53px 27px;
+    }
+    .page-title {
+      width: 192px;
+      height: 17px;
+      margin-bottom: 11px;
+      background: #e6e9eb;
+      border-radius: 4px;
+    }
+    .page-title.short { width: 145px; }
+    .rating {
+      width: 111px;
+      height: 11px;
+      margin: 24px 0 36px;
+      background: #eff1f2;
+      border-radius: 4px;
+    }
+    .price-line {
+      width: 98px;
+      height: 25px;
+      background: #dfe3e5;
+      border-radius: 5px;
+    }
+    .select-line {
+      width: 228px;
+      height: 54px;
+      margin-top: 30px;
+      border: 1px solid #eef0f2;
+      border-radius: 7px;
+    }
+    .select-line + .select-line { margin-top: 11px; }
+
+    .ksl-panel {
+      position: absolute;
+      top: 26px;
+      right: 166px;
+      width: 300px;
+      padding: 10px 10px 8px;
+      border: 1px solid var(--line);
+      border-radius: 25px;
+      background: var(--page);
+      box-shadow: var(--panel-shadow);
+      color: var(--text);
+    }
+    .ksl-panel > * + * { margin-top: 8px; }
+    .panel-metric {
+      padding: 18px 16px;
+      border-radius: 15px;
+      background: var(--ink);
+      color: #fff;
+    }
+    .panel-caption {
+      color: rgba(255, 255, 255, .72);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .panel-revenue {
+      margin: 8px 0 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.2);
+      font-size: 25px;
+      font-weight: 730;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .panel-results {
+      display: grid;
+      gap: 8px;
+    }
+    .panel-results span {
+      display: block;
+      color: rgba(255,255,255,.75);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    .panel-results strong {
+      display: block;
+      margin-top: 1px;
+      font-size: 15px;
+      font-weight: 730;
+      font-variant-numeric: tabular-nums;
+    }
+    .positive { color: #36d86b; }
+    .negative { color: #ff5c67; }
+    .panel-product {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 9px;
+      padding: 12px;
+      border-radius: 14px;
+      background: var(--surface);
+      box-shadow: var(--card-shadow);
+    }
+    .thumb {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border-radius: 7px;
+      background: #edf0f1;
+    }
+    .thumb::before {
+      content: "";
+      position: absolute;
+      inset: 5px 12px;
+      border: 2px solid #bfc5c8;
+      border-radius: 5px;
+      background: #fff;
+    }
+    .product-name {
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.25;
+    }
+    .sku {
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 10.5px;
+      font-weight: 700;
+    }
+    .soft-action {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(17,17,17,.11);
+      border-radius: 8px;
+      background: var(--control);
+      color: var(--ink);
+      font-size: 11.5px;
+      font-weight: 760;
+    }
+    .expense-card {
+      padding: 11px 12px;
+      border-radius: 13px;
+      background: var(--surface);
+      box-shadow: var(--card-shadow);
+      font-size: 10px;
+      font-weight: 650;
+    }
+    .expense-head, .expense-row {
+      display: grid;
+      grid-template-columns: 1fr 68px 46px;
+      gap: 4px;
+      align-items: center;
+    }
+    .expense-head {
+      margin-bottom: 7px;
+      color: var(--muted);
+      text-align: right;
+    }
+    .expense-row {
+      padding: 4px 0;
+      color: var(--text);
+    }
+    .expense-row b, .expense-row em {
+      text-align: right;
+      font-style: normal;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+    .expense-row b { color: var(--success); }
+    .expense-row em { color: var(--danger); }
+    .expense-row.total {
+      margin-top: 5px;
+      padding-top: 7px;
+      border-top: 1px solid var(--soft-line);
+      color: var(--ink);
+      font-weight: 760;
+    }
+    .panel-nav {
+      height: 44px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding-top: 7px;
+      border-top: 1px solid var(--soft-line);
+    }
+    .panel-nav span {
+      position: relative;
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+    }
+    .panel-nav svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 2; }
+    .panel-nav .active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--ink);
+    }
+
+    .signal {
+      border-bottom: 1px solid var(--soft-line);
+      background: var(--page);
+    }
+    .signal-inner {
+      min-height: 94px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .signal-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .signal-item + .signal-item {
+      padding-left: 36px;
+      border-left: 1px solid var(--soft-line);
+    }
+    .signal-item strong {
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 720;
+    }
+
+    .section {
+      padding: 82px 0;
+      border-bottom: 1px solid var(--soft-line);
+    }
+    .section-layout {
+      display: grid;
+      grid-template-columns: minmax(220px, 330px) 1fr;
+      gap: clamp(48px, 9vw, 112px);
+    }
+    .section-tag {
+      margin: 0 0 13px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    h2 {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(29px, 3.5vw, 36px);
+      font-weight: 750;
+      line-height: 1.17;
+      letter-spacing: 0;
+    }
+    .section-copy {
+      margin: 17px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.63;
+    }
+    .capabilities {
+      border-top: 1px solid var(--soft-line);
+    }
+    .capability {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 28px;
+      padding: 21px 0;
+      border-bottom: 1px solid var(--soft-line);
+    }
+    .capability h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 720;
+    }
+    .capability p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.56;
+    }
+
+    .print-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .demo-surface {
+      padding: 20px;
+      border: 1px solid var(--soft-line);
+      border-radius: 12px;
+      background: var(--surface);
+    }
+    .demo-title {
+      display: block;
+      margin-bottom: 14px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 740;
+    }
+    .drop-zone {
+      padding: 17px 9px;
+      border: 1px dashed #c0c7cb;
+      border-radius: 8px;
+      color: var(--ink);
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .drop-zone small {
       display: block;
       margin-top: 3px;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
+      font-weight: 550;
     }
-    .section {
-      padding: 58px 0;
-      border-top: 1px solid var(--line);
-    }
-    h2 {
-      margin: 0 0 33px;
-      color: var(--ink);
-      font-size: 29px;
-      font-weight: 740;
-      line-height: 1.2;
-      text-align: center;
-    }
-    .features {
+    .layout-row {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 48px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-top: 10px;
     }
-    .feature {
-      padding: 23px 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .feature:nth-child(-n+2) { border-top: 1px solid var(--line); }
-    .feature h3 {
-      margin: 0 0 7px;
-      color: var(--ink);
-      font-size: 16px;
-      font-weight: 680;
-    }
-    .feature p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-    .quiet {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 50px;
-      align-items: start;
-    }
-    .quiet h2 {
-      margin: 0;
-      text-align: left;
-    }
-    .notes {
-      display: grid;
-      gap: 17px;
-    }
-    .note {
-      display: grid;
-      grid-template-columns: 20px 1fr;
-      gap: 11px;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-    .note i {
-      width: 20px;
-      height: 20px;
+    .layout-row span {
+      height: 30px;
       display: grid;
       place-items: center;
-      border-radius: 50%;
-      color: var(--success);
-      background: #e6f3e9;
+      border: 1px solid rgba(17,17,17,.11);
+      border-radius: 7px;
+      background: var(--control);
+      color: var(--ink);
+      font-size: 10px;
+      font-weight: 760;
+    }
+    .layout-row .selected {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+    .export-row {
+      display: grid;
+      gap: 8px;
+    }
+    .export-item {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 13px;
+      border: 1px solid var(--soft-line);
+      border-radius: 8px;
+      color: var(--ink);
+      font-size: 12px;
+      font-weight: 680;
+    }
+    .export-item span:last-child {
+      color: var(--muted);
       font-size: 11px;
-      font-style: normal;
+    }
+    .privacy-list {
+      border-top: 1px solid var(--soft-line);
+    }
+    .privacy-row {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 15px;
+      padding: 19px 0;
+      border-bottom: 1px solid var(--soft-line);
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .check {
+      width: 19px;
+      height: 19px;
+      display: grid;
+      place-items: center;
+      margin-top: 1px;
+      border-radius: 50%;
+      background: #e7f4ea;
+      color: var(--success);
+      font-size: 11px;
       font-weight: 800;
     }
-    .contact {
-      padding: 62px 0 68px;
-      border-top: 1px solid var(--line);
+    .cta {
+      padding: 85px 0 92px;
       text-align: center;
     }
-    .contact h2 { margin-bottom: 12px; }
-    .contact p {
-      max-width: 460px;
-      margin: 0 auto 26px;
+    .cta h2 { margin-bottom: 16px; }
+    .cta p {
+      max-width: 540px;
+      margin: 0 auto 31px;
       color: var(--muted);
-      font-size: 15px;
+      font-size: 16px;
       line-height: 1.6;
     }
     footer {
       padding: 25px 0 34px;
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--soft-line);
       color: var(--muted);
       font-size: 12.5px;
     }
     .footer-inner {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 18px 30px;
       flex-wrap: wrap;
-      gap: 15px 22px;
     }
     .footer-links {
       display: flex;
-      gap: 18px;
+      gap: 20px;
+      flex-wrap: wrap;
     }
-    .footer-links a:hover { color: var(--ink); }
-    @media (max-width: 660px) {
-      .wrap { width: min(100% - 28px, 900px); }
-      nav a:first-child { display: none; }
-      .hero { padding: 52px 0 46px; }
+    @media (max-width: 1060px) {
+      .hero { min-height: 1000px; }
+      .hero-copy { padding-top: 62px; }
+      .store-scene {
+        top: 430px;
+        right: -110px;
+        width: min(720px, calc(100% + 70px));
+        height: 545px;
+      }
+      .ksl-panel { right: max(30px, calc((100% - 300px) / 2)); top: 17px; }
+      .product-visual, .product-page { opacity: .3; }
+    }
+    @media (max-width: 760px) {
+      .container { width: min(var(--content), calc(100% - 28px)); }
+      .top-nav a:not(.top-contact) { display: none; }
+      .top-contact { height: 35px; padding: 0 13px; }
+      .hero {
+        min-height: auto;
+        padding-bottom: 44px;
+      }
+      .hero-copy { padding-top: 48px; }
+      h1 { font-size: 41px; }
+      .hero-lead { font-size: 16px; }
+      .purpose { margin-top: 30px; }
+      .store-scene {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        height: 495px;
+        margin-top: 42px;
+        border-radius: 15px;
+      }
+      .store-header, .store-crumbs, .store-body { display: none; }
+      .ksl-panel {
+        top: 16px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(300px, calc(100% - 20px));
+      }
+      .signal-inner, .section-layout { grid-template-columns: 1fr; }
+      .signal-inner { padding: 11px 0; }
+      .signal-item {
+        min-height: 46px;
+      }
+      .signal-item + .signal-item {
+        padding-left: 0;
+        border-left: 0;
+        border-top: 1px solid var(--soft-line);
+      }
+      .section { padding: 53px 0; }
+      .section-copy { margin-bottom: 31px; }
+      .capability { grid-template-columns: 1fr; gap: 7px; padding: 17px 0; }
+      .print-demo { grid-template-columns: 1fr; }
+      .cta { padding: 57px 0 64px; }
+    }
+    @media (max-width: 400px) {
       h1 { font-size: 37px; }
-      .lead { font-size: 15.5px; }
-      .preview { margin-top: 42px; }
-      .metric { padding: 19px 16px; }
-      .results { gap: 12px 8px; }
-      .results b { font-size: 14px; }
-      .features, .quiet { grid-template-columns: 1fr; gap: 0; }
-      .feature:nth-child(2) { border-top: 0; }
-      .quiet h2 { margin-bottom: 29px; }
-      .section, .contact { padding: 46px 0; }
+      .actions { flex-direction: column; align-items: stretch; }
+      .button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap header-inner">
+  <header class="site-header">
+    <div class="container header-inner">
       <a class="brand" href="#" aria-label="Kaspi Seller Lens (Unofficial)">
         <img src="icons/icon128.png" alt="">
         <span>Kaspi Seller Lens</span>
       </a>
-      <nav aria-label="Навигация">
-        <a href="#features">Функции</a>
-        <a href="docs/privacy-policy.html">Приватность</a>
-        <a href="mailto:r.zhandos256@gmail.com">Контакт</a>
+      <nav class="top-nav" aria-label="Навигация">
+        <a href="#functions">Функции</a>
+        <a href="#privacy">Приватность</a>
+        <a href="docs/privacy-policy.html">Политика</a>
+        <a class="top-contact" href="mailto:r.zhandos256@gmail.com">Связаться</a>
       </nav>
     </div>
   </header>
 
   <main>
     <section class="hero">
-      <div class="wrap">
-        <div class="label">Расширение Chrome для продавцов Kaspi</div>
-        <h1>Kaspi Seller Lens<br>(Unofficial)</h1>
-        <p class="lead">Прибыль товара, расходы, история и печать накладных прямо на странице Kaspi.</p>
-        <div class="actions">
-          <a class="button" href="mailto:r.zhandos256@gmail.com?subject=Kaspi%20Seller%20Lens">Получить расширение</a>
-          <a class="button secondary" href="#features">Что умеет</a>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <p class="overline">Рабочая панель продавца Kaspi</p>
+          <h1>Kaspi Seller Lens <span class="unofficial">(Unofficial)</span></h1>
+          <p class="hero-lead">Прибыль, расходы, история товаров и накладные прямо на странице, где вы принимаете решение о продаже.</p>
+          <div class="actions">
+            <a class="button" href="mailto:r.zhandos256@gmail.com?subject=Kaspi%20Seller%20Lens">Получить расширение</a>
+            <a class="button secondary" href="#functions">Как работает</a>
+          </div>
+          <div class="purpose">
+            <b>Единая цель</b>
+            Помочь продавцу быстро оценить прибыльность товара и подготовить связанные рабочие материалы.
+          </div>
         </div>
 
-        <div class="preview" aria-label="Предпросмотр калькулятора расширения">
-          <div class="metric">
-            <div class="metric-label">Оценка выручки</div>
-            <div class="revenue">10,448,600 ₸</div>
-            <div class="results">
-              <div><span>Доход после налогов</span><b class="green">8,656,959 ₸</b></div>
-              <div><span>Доход / 1 шт</span><b class="green">14,748 ₸</b></div>
-              <div><span>Расходы + налоги</span><b class="red">1,791,641 ₸</b></div>
-              <div><span>Расход / 1 шт</span><b class="red">3,052 ₸</b></div>
+        <div class="store-scene" aria-label="Kaspi Seller Lens поверх страницы товара Kaspi">
+          <div class="store-header" aria-hidden="true">
+            <span class="store-logo">Kaspi.kz</span>
+            <div class="store-search"></div>
+            <span>Каталог</span>
+          </div>
+          <div class="store-crumbs" aria-hidden="true">Kaspi Магазин <span>›</span> Телефоны <span>›</span> Смартфоны</div>
+          <div class="store-body" aria-hidden="true">
+            <div class="product-visual"><div class="phone"></div></div>
+            <div class="product-page">
+              <div class="page-title"></div>
+              <div class="page-title short"></div>
+              <div class="rating"></div>
+              <div class="price-line"></div>
+              <div class="select-line"></div>
+              <div class="select-line"></div>
             </div>
           </div>
-          <div class="item">
-            <img src="icons/icon128.png" alt="">
-            <div>
-              <strong>Товар со страницы Kaspi</strong>
-              <small>Расчёт сохраняется в историю</small>
+          <div class="ksl-panel">
+            <div class="panel-metric">
+              <div class="panel-caption">Оценка выручки</div>
+              <div class="panel-revenue">10,448,600 ₸</div>
+              <div class="panel-results">
+                <div><span>Доход после налогов</span><strong class="positive">8,656,959 ₸</strong></div>
+                <div><span>Доход / 1 шт</span><strong class="positive">14,748 ₸</strong></div>
+                <div><span>Все расходы + налоги</span><strong class="negative">1,791,641 ₸</strong></div>
+                <div><span>Расход / 1 шт</span><strong class="negative">3,052 ₸</strong></div>
+              </div>
+            </div>
+            <div class="panel-product">
+              <span class="thumb" aria-hidden="true"></span>
+              <div>
+                <div class="product-name">Смартфон Apple iPhone 15 256Gb</div>
+                <div class="sku">Арт. 113137897</div>
+              </div>
+            </div>
+            <div class="soft-action">Расходы</div>
+            <div class="expense-card">
+              <div class="expense-head"><span></span><b>Все</b><em>Шт</em></div>
+              <div class="expense-row"><span>Доставка Kaspi</span><b>58,700 ₸</b><em>100 ₸</em></div>
+              <div class="expense-row"><span>Комиссия</span><b>1,138,897 ₸</b><em>1,940 ₸</em></div>
+              <div class="expense-row"><span>ИПН</span><b>417,944 ₸</b><em>712 ₸</em></div>
+              <div class="expense-row total"><span>Всего</span><b>1,791,641 ₸</b><em>3,052 ₸</em></div>
+            </div>
+            <div class="panel-nav" aria-hidden="true">
+              <span class="active"><svg viewBox="0 0 24 24"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M9 6h6M9 11h1M12 11h1M15 11h1M9 15h1M12 15h1M15 15h1"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><path d="M19 5 5 19"/><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><path d="M6 2h9l4 4v16H6Z"/><path d="M14 2v5h5M9 13h7M9 17h7"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/></svg></span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section" id="features">
-      <div class="wrap">
-        <h2>Всё необходимое для оценки товара</h2>
-        <div class="features">
-          <article class="feature">
+    <section class="signal">
+      <div class="container signal-inner">
+        <div class="signal-item"><strong>Все / шт</strong><span>Расходы читаются сразу</span></div>
+        <div class="signal-item"><strong>Excel + PNG</strong><span>Готовые рабочие отчёты</span></div>
+        <div class="signal-item"><strong>A4 / Термо</strong><span>Накладные для печати</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="functions">
+      <div class="container section-layout">
+        <div>
+          <p class="section-tag">Возможности</p>
+          <h2>Никаких лишних переключений</h2>
+          <p class="section-copy">Откройте товар, задайте свои расходы и получите результат в той же странице.</p>
+        </div>
+        <div class="capabilities">
+          <article class="capability">
             <h3>Калькулятор</h3>
-            <p>Доход, расходы, комиссия, ИПН, маржа и ROI с расчётом на 1 шт.</p>
+            <p>Выручка, доход, расходы, комиссия категории, ИПН, маржа и ROI в компактном представлении.</p>
           </article>
-          <article class="feature">
-            <h3>Профили и история</h3>
-            <p>Свои параметры по категориям и сохранённые товары для сравнения.</p>
+          <article class="capability">
+            <h3>Профили</h3>
+            <p>Свои параметры для разных категорий, чтобы не вводить доставку и расходы заново.</p>
           </article>
-          <article class="feature">
-            <h3>Накладные</h3>
-            <p>ZIP с PDF превращается в один файл для A4 или термопринтера 75x120.</p>
+          <article class="capability">
+            <h3>История</h3>
+            <p>Сохранённые товары, фильтр по категориям и экспорт списка для сравнения в Excel.</p>
           </article>
-          <article class="feature">
-            <h3>Экспорт</h3>
-            <p>Excel-отчёт, PNG-отчёт и фотографии товара для рабочей подборки.</p>
+          <article class="capability">
+            <h3>Магазин</h3>
+            <p>Merchant ID, ссылка на магазин и быстрый переход к товарам продавца.</p>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container section-layout">
+        <div>
+          <p class="section-tag">Результат</p>
+          <h2>Отчёты и печать без рутины</h2>
+          <p class="section-copy">Сохраняйте расчёт или собирайте накладные в удобный для печати PDF.</p>
+        </div>
+        <div class="print-demo">
+          <div class="demo-surface">
+            <span class="demo-title">Накладные</span>
+            <div class="drop-zone">Перетащите ZIP сюда<small>или выберите архив</small></div>
+            <div class="layout-row">
+              <span class="selected">4 на 1</span><span>8 на 1</span><span>9 на 1</span><span>16 на 1</span>
+            </div>
+          </div>
+          <div class="demo-surface">
+            <span class="demo-title">Экспорт</span>
+            <div class="export-row">
+              <div class="export-item"><span>Excel-отчёт</span><span>.xlsx</span></div>
+              <div class="export-item"><span>Фото-отчёт</span><span>.png</span></div>
+              <div class="export-item"><span>Фото товара</span><span>.zip</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="section" id="privacy">
-      <div class="wrap quiet">
-        <h2>Данные остаются<br>на вашем устройстве</h2>
-        <div class="notes">
-          <div class="note"><i>✓</i><span>Настройки, профили и история хранятся локально в Chrome.</span></div>
-          <div class="note"><i>✓</i><span>ZIP и PDF накладных обрабатываются локально для формирования файла.</span></div>
-          <div class="note"><i>✓</i><span>Расширение не продаёт пользовательские данные и не использует их для персонализированной рекламы.</span></div>
+      <div class="container section-layout">
+        <div>
+          <p class="section-tag">Приватность</p>
+          <h2>Рабочие данные остаются у вас</h2>
+          <p class="section-copy">Расширение создано для локальной обработки данных в браузере пользователя.</p>
+        </div>
+        <div class="privacy-list">
+          <div class="privacy-row"><span class="check">✓</span><span>Настройки, профили и история сохраняются локально через Chrome storage.</span></div>
+          <div class="privacy-row"><span class="check">✓</span><span>ZIP и PDF накладных обрабатываются на устройстве для формирования готового файла.</span></div>
+          <div class="privacy-row"><span class="check">✓</span><span>Пользовательские данные не продаются и не используются для персонализированной рекламы.</span></div>
         </div>
       </div>
     </section>
 
-    <section class="contact">
-      <div class="wrap">
+    <section class="cta">
+      <div class="container">
         <h2>Kaspi Seller Lens</h2>
-        <p>Независимый рабочий инструмент для продавцов Kaspi. Не является официальным продуктом Kaspi.kz.</p>
+        <p>Независимый инструмент для продавцов Kaspi. Не является официальным продуктом Kaspi.kz.</p>
         <a class="button" href="mailto:r.zhandos256@gmail.com?subject=Kaspi%20Seller%20Lens">Связаться с автором</a>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap footer-inner">
+    <div class="container footer-inner">
       <span>Kaspi Seller Lens (Unofficial) © 2026</span>
       <div class="footer-links">
         <a href="docs/privacy-policy.html">Политика конфиденциальности</a>
