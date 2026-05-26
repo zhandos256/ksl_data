@@ -5,129 +5,406 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Политика конфиденциальности - Kaspi Seller Lens (Unofficial)</title>
   <meta name="description" content="Политика конфиденциальности расширения Chrome Kaspi Seller Lens (Unofficial).">
+  <link rel="icon" type="image/png" href="../icons/icon32.png">
   <style>
     :root {
       color-scheme: light;
-      --text: #151719;
-      --muted: #5f6770;
-      --surface: #fff;
       --page: #f8f9fa;
-      --line: #e3e6e8;
-      --link: #1264d8;
+      --surface: #fff;
+      --ink: #111;
+      --text: #444;
+      --muted: #666;
+      --line: rgba(0, 0, 0, .12);
+      --soft-line: #e4e7e9;
+      --control: #eceff1;
+      --control-hover: #e3e7ea;
+      --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      --content: 1020px;
+      --reading: 820px;
     }
-    * { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
       background: var(--page);
       color: var(--text);
-      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      font-family: var(--font);
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
     }
-    main {
-      width: min(820px, calc(100% - 32px));
-      margin: 32px auto;
-      padding: clamp(24px, 5vw, 48px);
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: 16px;
+    a { color: inherit; text-decoration: none; }
+    .container {
+      width: min(var(--content), calc(100% - 48px));
+      margin: 0 auto;
     }
-    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 36px); line-height: 1.2; }
-    h2 { margin: 32px 0 10px; font-size: 21px; line-height: 1.35; }
-    h3 { margin: 22px 0 8px; font-size: 17px; }
-    p, ul { margin: 8px 0; }
-    ul { padding-left: 22px; }
-    .meta, .note { color: var(--muted); }
-    .lead {
-      margin: 24px 0;
-      padding: 16px 18px;
+    .site-header {
+      border-bottom: 1px solid var(--soft-line);
       background: var(--page);
-      border-radius: 10px;
     }
-    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 15px; }
-    th, td { padding: 10px 12px; border: 1px solid var(--line); text-align: left; vertical-align: top; }
-    th { background: var(--page); }
-    code { font: 0.92em ui-monospace, SFMono-Regular, Consolas, monospace; }
-    a { color: var(--link); }
-    footer { margin-top: 36px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); }
+    .header-inner {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 760;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .top-nav a:hover, .footer-links a:hover { color: var(--ink); }
+    .top-install {
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      transition: background .16s ease;
+    }
+    .top-install:hover { color: #fff; background: #292929; }
+    .hero {
+      border-bottom: 1px solid var(--soft-line);
+      background: var(--surface);
+    }
+    .hero-inner {
+      width: min(var(--reading), calc(100% - 48px));
+      margin: 0 auto;
+      padding: 62px 0 50px;
+    }
+    .overline {
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    h1 {
+      max-width: 740px;
+      margin: 0;
+      color: var(--ink);
+      font-size: 46px;
+      font-weight: 790;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+    .lead {
+      max-width: 680px;
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.62;
+    }
+    .meta {
+      display: inline-flex;
+      margin-top: 27px;
+      padding: 9px 13px;
+      border-radius: 8px;
+      background: var(--control);
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 620;
+    }
+    .document {
+      width: min(var(--reading), calc(100% - 48px));
+      margin: 32px auto 70px;
+      overflow: hidden;
+      border: 1px solid var(--soft-line);
+      border-radius: 14px;
+      background: var(--surface);
+    }
+    .policy-section {
+      padding: 27px 30px 28px;
+      border-bottom: 1px solid var(--soft-line);
+    }
+    .policy-section:last-child { border-bottom: 0; }
+    h2 {
+      margin: 0 0 13px;
+      color: var(--ink);
+      font-size: 20px;
+      line-height: 1.32;
+      font-weight: 760;
+    }
+    h3 {
+      margin: 19px 0 7px;
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.4;
+      font-weight: 720;
+    }
+    p, li {
+      color: var(--text);
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    p { margin: 9px 0 0; }
+    ul {
+      margin: 10px 0 0;
+      padding-left: 22px;
+    }
+    li + li { margin-top: 5px; }
+    code {
+      padding: 2px 5px;
+      border-radius: 5px;
+      background: var(--control);
+      color: var(--ink);
+      font: .91em ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+    .notice {
+      margin-top: 16px;
+      padding: 14px 16px;
+      border-radius: 8px;
+      background: var(--page);
+    }
+    .notice strong { color: var(--ink); }
+    .permission-list {
+      display: grid;
+      gap: 8px;
+      margin-top: 15px;
+    }
+    .permission {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 18px;
+      padding: 13px 14px;
+      border-radius: 8px;
+      background: var(--page);
+    }
+    .permission strong {
+      color: var(--ink);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+    .permission span {
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .contact-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .contact-link {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      padding: 0 15px;
+      border: 1px solid var(--soft-line);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 620;
+    }
+    .contact-link:hover { background: var(--control); }
+    .contact-link.primary {
+      border-color: var(--ink);
+      background: var(--ink);
+      color: #fff;
+    }
+    .contact-link.primary:hover { background: #292929; }
+    .site-footer {
+      padding: 0 0 34px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .footer-links {
+      display: flex;
+      gap: 18px;
+      font-weight: 600;
+    }
+    @media (max-width: 720px) {
+      .container, .hero-inner, .document { width: min(100% - 32px, var(--reading)); }
+      .header-inner { min-height: 62px; gap: 12px; }
+      .brand span { display: none; }
+      .top-nav { gap: 10px; }
+      .top-nav > a:not(.top-install) { display: none; }
+      .top-install { height: 36px; padding: 0 13px; }
+      .hero-inner { padding: 42px 0 38px; }
+      h1 {
+        font-size: 27px;
+        overflow-wrap: anywhere;
+      }
+      .lead { font-size: 15px; }
+      .document { margin-top: 20px; margin-bottom: 45px; }
+      .policy-section { padding: 22px 19px; }
+      h2 { font-size: 18px; }
+      .permission { display: block; }
+      .permission strong { display: block; margin-bottom: 5px; }
+      .contact-link { width: 100%; justify-content: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Политика конфиденциальности Kaspi Seller Lens (Unofficial)</h1>
-    <p class="meta">Дата вступления в силу: <strong>25 мая 2026 г.</strong></p>
-    <p class="note"><strong>Kaspi Seller Lens (Unofficial)</strong> - независимое расширение Chrome для продавцов на Kaspi.kz. Расширение не является официальным продуктом Kaspi.kz и не связано с Kaspi.kz.</p>
-    <p>Контакт по вопросам конфиденциальности: <a href="mailto:r.zhandos256@gmail.com">r.zhandos256@gmail.com</a></p>
-
-    <div class="lead">
-      Kaspi Seller Lens (Unofficial) работает на страницах <code>https://kaspi.kz/*</code>, чтобы по команде пользователя показывать калькулятор, сохранять историю товаров, формировать выгрузки и объединять накладные. Данные этих функций обрабатываются на устройстве пользователя и сохраняются локально в браузере. Расширение не использует аналитику или трекинг, не продаёт пользовательские данные и не использует их для персонализированной рекламы.
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="../landing.html" aria-label="Kaspi Seller Lens (Unofficial)">
+        <img src="../icons/icon32.png" alt="">
+        <span>Kaspi Seller Lens (Unofficial)</span>
+      </a>
+      <nav class="top-nav" aria-label="Навигация">
+        <a href="../landing.html">Главная</a>
+        <a href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer">Telegram</a>
+        <a class="top-install" href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer">Установить</a>
+      </nav>
     </div>
+  </header>
 
-    <h2>Какие данные обрабатывает расширение</h2>
-    <h3>Данные со страницы Kaspi</h3>
-    <p>Если пользователь настроил селекторы или открыл поддерживаемую страницу, расширение может прочитать видимые на странице данные:</p>
-    <ul>
-      <li>название, изображение и URL изображений галереи товара;</li>
-      <li>категорию, отображаемую цену, отзывы/продажи и артикул товара;</li>
-      <li>URL текущей страницы товара;</li>
-      <li>на странице продавца: название магазина, Merchant ID и URL страницы.</li>
-    </ul>
-    <p>Эти данные нужны только для расчётов, карточки товара, истории, переходов, копирования ссылки и пользовательских экспортов.</p>
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="overline">Kaspi Seller Lens (Unofficial)</p>
+      <h1>Политика конфиденциальности</h1>
+      <p class="lead">Прозрачно описываем, какие данные нужны расширению для расчётов, отчётов и печати накладных, где они хранятся и кому не передаются.</p>
+      <div class="meta">Дата вступления в силу: 26 мая 2026 г.</div>
+    </div>
+  </section>
 
-    <h3>Данные, введённые пользователем</h3>
-    <p>Расширение сохраняет параметры расчёта, включая цену закупа, доставку, упаковку, карго, комиссию категории, бонус за отзыв, рекламу и ИПН, а также настройки профилей категорий.</p>
+  <main class="document">
+    <section class="policy-section">
+      <h2>1. О расширении</h2>
+      <p><strong>Kaspi Seller Lens (Unofficial)</strong> - независимое расширение Chrome для продавцов на Kaspi.kz. Оно не является официальным продуктом Kaspi.kz и не связано с Kaspi.kz.</p>
+      <p>Расширение работает на страницах <code>https://kaspi.kz/*</code>, чтобы по действию пользователя рассчитывать показатели товара, сохранять историю, создавать отчёты и объединять накладные для печати.</p>
+      <div class="notice"><strong>Коротко:</strong> данные функций обрабатываются на устройстве пользователя и хранятся локально в Chrome. Расширение не использует аналитику или трекинг и не продаёт пользовательские данные.</div>
+    </section>
 
-    <h3>Настройки, история и кэш баннеров</h3>
-    <p>Расширение сохраняет CSS-селекторы, язык и настройки авто-открытия, историю товаров с рассчитанными значениями, а также локальный кэш содержимого рекламных баннеров и время его обновления.</p>
+    <section class="policy-section">
+      <h2>2. Какие данные обрабатываются</h2>
+      <h3>Данные со страниц Kaspi</h3>
+      <p>Для пользовательских функций расширение может прочитать видимые на странице сведения:</p>
+      <ul>
+        <li>название товара, изображение и URL изображений галереи;</li>
+        <li>категорию, отображаемую цену, отзывы/продажи и артикул товара;</li>
+        <li>URL текущей страницы товара;</li>
+        <li>на странице продавца: название магазина, Merchant ID и URL страницы.</li>
+      </ul>
+      <h3>Введённые пользователем данные</h3>
+      <p>Расширение сохраняет параметры расчёта: цену закупа, доставку, упаковку, карго, комиссию категории, бонус за отзыв, рекламу, ИПН и профили категорий.</p>
+      <h3>Настройки и история</h3>
+      <p>Расширение сохраняет выбранные CSS-селекторы, язык, настройки авто-открытия, историю товаров с рассчитанными значениями, а также кэш конфигурации баннеров и время его обновления.</p>
+    </section>
 
-    <h3>Файлы накладных</h3>
-    <p>Пользователь может выбрать ZIP-архив с PDF-накладными. Архив и PDF обрабатываются локально в браузере для создания объединённого PDF. Kaspi Seller Lens (Unofficial) не отправляет эти файлы разработчику или на внешний сервер.</p>
+    <section class="policy-section">
+      <h2>3. Для чего используются данные</h2>
+      <p>Данные используются только для видимых пользователю функций: калькулятора юнит-экономики, карточки товара, профилей категорий, истории и сравнения товаров, копирования ссылок, Excel- и PNG-отчётов, скачивания фото товара, режима магазина и подготовки накладных к печати.</p>
+      <p>Расширение не использует содержимое страниц Kaspi для персонализированной, ретаргетинговой или основанной на интересах рекламы.</p>
+    </section>
 
-    <h2>Где хранятся данные</h2>
-    <p>Настройки, профили, история, селекторы и кэш баннеров хранятся локально через <code>chrome.storage.local</code> в профиле Chrome пользователя. Данные хранятся до их замены, очистки данных расширения в браузере или удаления расширения. Разработчик Kaspi Seller Lens (Unofficial) не получает доступа к содержимому локального хранилища.</p>
+    <section class="policy-section">
+      <h2>4. Файлы накладных</h2>
+      <p>Пользователь может загрузить ZIP-архив с PDF-накладными Kaspi. Такие файлы могут содержать сведения о заказе или покупателе, например имя, адрес или телефон, если они присутствуют в самой накладной.</p>
+      <p>Архив и PDF обрабатываются локально в браузере только для создания объединённого PDF. Расширение не отправляет накладные разработчику или на внешний сервер.</p>
+    </section>
 
-    <h2>Внешние сетевые обращения</h2>
-    <ul>
-      <li><strong>Конфигурация рекламного баннера.</strong> Расширение получает JSON-конфигурацию с <code>raw.githubusercontent.com</code> и кэширует её локально на срок до 6 часов. Запрос не содержит данные товара, настройки, историю или файлы пользователя. GitHub может обрабатывать стандартные технические сведения запроса согласно собственной политике.</li>
-      <li><strong>Изображения товара.</strong> Только когда пользователь запускает «Фото-отчёт» (PNG) или «Скачать фото товара», расширение может загрузить изображения, уже указанные на странице товара Kaspi, с соответствующего CDN/ресурса для формирования локального файла.</li>
-      <li><strong>Переход по баннеру.</strong> При нажатии на баннер открывается указанная в нём внешняя ссылка. После перехода применяются правила соответствующего сайта.</li>
-    </ul>
-    <p>Kaspi Seller Lens (Unofficial) не отправляет разработчику данные страницы Kaspi, историю, параметры калькулятора или загруженные пользователем накладные.</p>
+    <section class="policy-section">
+      <h2>5. Где и как долго хранятся данные</h2>
+      <p>Селекторы, настройки, профили, история и кэш баннеров сохраняются в <code>chrome.storage.local</code> в профиле Chrome пользователя. Они остаются там до замены, очистки данных расширения или удаления расширения.</p>
+      <p>Разработчик не получает доступ к содержимому локального хранилища пользователя.</p>
+    </section>
 
-    <h2>Экспорт, загрузки и буфер обмена</h2>
-    <ul>
-      <li>Excel-, PNG-, ZIP- и PDF-файлы формируются по действию пользователя и скачиваются через браузер на его устройство.</li>
-      <li>Копирование ссылок или контактных данных поддержки выполняется только после нажатия пользователем соответствующей кнопки.</li>
-      <li>Расширение не читает содержимое буфера обмена.</li>
-    </ul>
+    <section class="policy-section">
+      <h2>6. Внешние сетевые обращения</h2>
+      <ul>
+        <li><strong>Конфигурация баннера.</strong> Расширение получает JSON-конфигурацию с <code>raw.githubusercontent.com</code> по HTTPS и кэширует её локально на срок до 6 часов. Запрос не содержит данные товара, историю, настройки расчёта или накладные.</li>
+        <li><strong>Изображения товара.</strong> По команде пользователя для PNG-отчёта или скачивания фото расширение может загрузить изображения, уже указанные на странице Kaspi, с соответствующего ресурса/CDN Kaspi.</li>
+        <li><strong>Ссылка баннера.</strong> Нажатие пользователем на баннер открывает указанную в нём внешнюю страницу; далее действует политика этого сайта.</li>
+      </ul>
+      <p>Расширение не отправляет разработчику содержимое страниц Kaspi, параметры калькулятора, историю товаров или файлы накладных.</p>
+    </section>
 
-    <h2>Разрешения Chrome</h2>
-    <table>
-      <thead>
-        <tr><th>Разрешение</th><th>Для чего используется</th></tr>
-      </thead>
-      <tbody>
-        <tr><td><code>storage</code></td><td>Локальное сохранение селекторов, параметров расчёта, профилей, истории, настроек интерфейса и кэша баннеров.</td></tr>
-        <tr><td><code>https://kaspi.kz/*</code></td><td>Показ панели на Kaspi и чтение видимых данных страницы для функций расширения.</td></tr>
-        <tr><td><code>https://raw.githubusercontent.com/*</code></td><td>Загрузка JSON-конфигурации рекламного баннера по HTTPS.</td></tr>
-      </tbody>
-    </table>
+    <section class="policy-section">
+      <h2>7. Экспорт и буфер обмена</h2>
+      <ul>
+        <li>Excel-, PNG-, ZIP- и PDF-файлы создаются только по действию пользователя и скачиваются на его устройство.</li>
+        <li>Ссылки товара, магазина или контактные данные поддержки копируются только после нажатия соответствующей кнопки.</li>
+        <li>Расширение не читает содержимое буфера обмена.</li>
+      </ul>
+    </section>
 
-    <h2>Передача, продажа и реклама</h2>
-    <p>Kaspi Seller Lens (Unofficial) не продаёт пользовательские данные и не передаёт их рекламным платформам или брокерам данных; не использует такие данные для персонализированной, ретаргетинговой или основанной на интересах рекламы; не позволяет разработчику или другим людям читать локально сохранённые данные пользователя.</p>
-    <p>Единственные обращения к внешним сторонам описаны выше: GitHub получает запрос за общей конфигурацией баннера, ресурсы изображений Kaspi/CDN запрашиваются по выбранной пользователем функции экспорта или скачивания, а внешний сайт открывается только после клика по баннеру.</p>
-    <p>Рекламный баннер является общей конфигурацией содержимого и не выбирается на основании данных товара, истории или поведения пользователя в расширении.</p>
+    <section class="policy-section">
+      <h2>8. Разрешения Chrome</h2>
+      <p>Расширение использует разрешения, необходимые для заявленных функций:</p>
+      <div class="permission-list">
+        <div class="permission">
+          <strong><code>storage</code></strong>
+          <span>Локальное сохранение селекторов, расчётов, профилей, истории, настроек интерфейса и кэша баннеров.</span>
+        </div>
+        <div class="permission">
+          <strong><code>https://kaspi.kz/*</code></strong>
+          <span>Показ панели на Kaspi и чтение видимых данных страницы для пользовательских функций расширения.</span>
+        </div>
+        <div class="permission">
+          <strong><code>raw.githubusercontent.com</code></strong>
+          <span>Загрузка JSON-конфигурации баннера по защищённому HTTPS-соединению.</span>
+        </div>
+      </div>
+    </section>
 
-    <h2>Chrome Web Store Limited Use</h2>
-    <p><strong>The use of information received from Google APIs and Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.</strong></p>
-    <p>Доступ к данным страницы и хранилищу используется только для предоставления описанных пользовательских функций Kaspi Seller Lens (Unofficial).</p>
+    <section class="policy-section">
+      <h2>9. Передача, продажа и реклама</h2>
+      <p>Kaspi Seller Lens (Unofficial) не продаёт пользовательские данные, не передаёт их рекламным платформам или брокерам данных и не позволяет разработчику или другим людям читать локально сохранённые данные пользователя.</p>
+      <p>Баннер является общей конфигурацией содержимого: он не выбирается на основании данных товара, истории или поведения пользователя в расширении. Внешние обращения ограничены случаями, описанными в разделе 6.</p>
+    </section>
 
-    <h2>Изменения политики</h2>
-    <p>При изменении функций расширения или способов обработки данных эта политика будет обновлена. Актуальная версия будет опубликована по URL, указанному на странице Kaspi Seller Lens (Unofficial) в Chrome Web Store.</p>
+    <section class="policy-section">
+      <h2>10. Chrome Web Store Limited Use</h2>
+      <p><strong>The use of information received from Google APIs and Chrome extension APIs will adhere to the Chrome Web Store User Data Policy, including the Limited Use requirements.</strong></p>
+      <p>Доступ к содержимому страниц и хранилищу используется только для предоставления и улучшения пользовательских функций, описанных в этой политике и на странице расширения.</p>
+    </section>
 
-    <footer>
-      По вопросам о конфиденциальности или работе Kaspi Seller Lens (Unofficial):
-      <a href="mailto:r.zhandos256@gmail.com">r.zhandos256@gmail.com</a>
-    </footer>
+    <section class="policy-section">
+      <h2>11. Управление данными и изменения политики</h2>
+      <p>Пользователь может заменить сохранённые настройки через интерфейс расширения или удалить локальные данные, удалив расширение либо очистив его данные в Chrome.</p>
+      <p>При изменении функций или обработки данных политика будет обновлена. Актуальная версия публикуется по ссылке, указанной в Chrome Web Store.</p>
+    </section>
+
+    <section class="policy-section">
+      <h2>12. Контакты</h2>
+      <p>По вопросам конфиденциальности или работы Kaspi Seller Lens (Unofficial) свяжитесь с автором:</p>
+      <div class="contact-row">
+        <a class="contact-link primary" href="mailto:r.zhandos256@gmail.com">r.zhandos256@gmail.com</a>
+        <a class="contact-link" href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer">Telegram: @digitalcraftzman</a>
+      </div>
+    </section>
   </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span>Kaspi Seller Lens (Unofficial) - независимый проект.</span>
+      <div class="footer-links">
+        <a href="../landing.html">Главная</a>
+        <a href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer">Chrome Web Store</a>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>
