@@ -78,7 +78,30 @@
       font-weight: 600;
     }
     .top-nav a:hover, .footer-links a:hover { color: var(--ink); }
-    .top-contact {
+    .lang-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--control);
+    }
+    .lang-switch button {
+      height: 30px;
+      min-width: 38px;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font: 700 12px/1 var(--font);
+      cursor: pointer;
+      transition: background .16s ease, color .16s ease;
+    }
+    .lang-switch button.active {
+      background: var(--ink);
+      color: #fff;
+    }
+    .top-install {
       height: 38px;
       display: inline-flex;
       align-items: center;
@@ -88,7 +111,7 @@
       background: var(--ink);
       color: #fff;
     }
-    .top-contact:hover { color: #fff; background: #292929; }
+    .top-install:hover { color: #fff; background: #292929; }
 
     .hero {
       position: relative;
@@ -647,6 +670,11 @@
       font-size: 16px;
       line-height: 1.6;
     }
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: 9px;
+    }
     footer {
       padding: 25px 0 34px;
       border-top: 1px solid var(--soft-line);
@@ -665,6 +693,10 @@
       gap: 20px;
       flex-wrap: wrap;
     }
+    @media (max-width: 980px) {
+      .top-nav { gap: 10px; }
+      .top-nav a[href="docs/privacy-policy.html"] { display: none; }
+    }
     @media (max-width: 1060px) {
       .hero { min-height: 1000px; }
       .hero-copy { padding-top: 62px; }
@@ -679,8 +711,11 @@
     }
     @media (max-width: 760px) {
       .container { width: min(var(--content), calc(100% - 28px)); }
-      .top-nav a:not(.top-contact) { display: none; }
-      .top-contact { height: 35px; padding: 0 13px; }
+      .header-inner { gap: 10px; }
+      .brand span { display: none; }
+      .top-nav { gap: 8px; }
+      .top-nav a:not(.top-install) { display: none; }
+      .top-install { height: 35px; padding: 0 12px; }
       .hero {
         min-height: auto;
         padding-bottom: 44px;
@@ -724,8 +759,9 @@
     }
     @media (max-width: 400px) {
       h1 { font-size: 37px; }
-      .actions { flex-direction: column; align-items: stretch; }
+      .actions, .cta-actions { flex-direction: column; align-items: stretch; }
       .button { width: 100%; }
+      .top-install { padding: 0 10px; font-size: 12px; }
     }
   </style>
 </head>
@@ -736,11 +772,15 @@
         <img src="icons/icon128.png" alt="">
         <span>Kaspi Seller Lens</span>
       </a>
-      <nav class="top-nav" aria-label="Навигация">
-        <a href="#functions">Функции</a>
-        <a href="#privacy">Приватность</a>
-        <a href="docs/privacy-policy.html">Политика</a>
-        <a class="top-contact" href="mailto:r.zhandos256@gmail.com">Связаться</a>
+      <nav class="top-nav" aria-label="Навигация" data-i18n-aria="navAria">
+        <a href="#functions" data-i18n="navFunctions">Функции</a>
+        <a href="#privacy" data-i18n="navPrivacy">Приватность</a>
+        <a href="docs/privacy-policy.html" data-i18n="navPolicy">Политика</a>
+        <div class="lang-switch" role="group" aria-label="Язык" data-i18n-aria="languageAria">
+          <button type="button" data-lang="kk">KZ</button>
+          <button type="button" class="active" data-lang="ru">RU</button>
+        </div>
+        <a class="top-install" href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer" data-i18n="navInstall">Установить</a>
       </nav>
     </div>
   </header>
@@ -749,26 +789,26 @@
     <section class="hero">
       <div class="container hero-inner">
         <div class="hero-copy">
-          <p class="overline">Рабочая панель продавца Kaspi</p>
+          <p class="overline" data-i18n="heroOverline">Рабочая панель продавца Kaspi</p>
           <h1>Kaspi Seller Lens <span class="unofficial">(Unofficial)</span></h1>
-          <p class="hero-lead">Прибыль, расходы, история товаров и накладные прямо на странице, где вы принимаете решение о продаже.</p>
+          <p class="hero-lead" data-i18n="heroLead">Прибыль, расходы, история товаров и накладные прямо на странице, где вы принимаете решение о продаже.</p>
           <div class="actions">
-            <a class="button" href="mailto:r.zhandos256@gmail.com?subject=Kaspi%20Seller%20Lens">Получить расширение</a>
-            <a class="button secondary" href="#functions">Как работает</a>
+            <a class="button" href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer" data-i18n="heroInstall">Установить из Chrome Web Store</a>
+            <a class="button secondary" href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer" data-i18n="heroTelegram">Написать в Telegram</a>
           </div>
           <div class="purpose">
-            <b>Единая цель</b>
-            Помочь продавцу быстро оценить прибыльность товара и подготовить связанные рабочие материалы.
+            <b data-i18n="purposeTitle">Единая цель</b>
+            <span data-i18n="purposeText">Помочь продавцу быстро оценить прибыльность товара и подготовить связанные рабочие материалы.</span>
           </div>
         </div>
 
-        <div class="store-scene" aria-label="Kaspi Seller Lens поверх страницы товара Kaspi">
+        <div class="store-scene" aria-label="Kaspi Seller Lens поверх страницы товара Kaspi" data-i18n-aria="sceneAria">
           <div class="store-header" aria-hidden="true">
             <span class="store-logo">Kaspi.kz</span>
             <div class="store-search"></div>
-            <span>Каталог</span>
+            <span data-i18n="catalog">Каталог</span>
           </div>
-          <div class="store-crumbs" aria-hidden="true">Kaspi Магазин <span>›</span> Телефоны <span>›</span> Смартфоны</div>
+          <div class="store-crumbs" aria-hidden="true"><span data-i18n="crumbShop">Kaspi Магазин</span> <span>›</span> <span data-i18n="crumbPhones">Телефоны</span> <span>›</span> <span data-i18n="crumbSmartphones">Смартфоны</span></div>
           <div class="store-body" aria-hidden="true">
             <div class="product-visual"><div class="phone"></div></div>
             <div class="product-page">
@@ -782,29 +822,29 @@
           </div>
           <div class="ksl-panel">
             <div class="panel-metric">
-              <div class="panel-caption">Оценка выручки</div>
+              <div class="panel-caption" data-i18n="panelRevenue">Оценка выручки</div>
               <div class="panel-revenue">10,448,600 ₸</div>
               <div class="panel-results">
-                <div><span>Доход после налогов</span><strong class="positive">8,656,959 ₸</strong></div>
-                <div><span>Доход / 1 шт</span><strong class="positive">14,748 ₸</strong></div>
-                <div><span>Все расходы + налоги</span><strong class="negative">1,791,641 ₸</strong></div>
-                <div><span>Расход / 1 шт</span><strong class="negative">3,052 ₸</strong></div>
+                <div><span data-i18n="panelProfit">Доход после налогов</span><strong class="positive">8,656,959 ₸</strong></div>
+                <div><span data-i18n="panelProfitUnit">Доход / 1 шт</span><strong class="positive">14,748 ₸</strong></div>
+                <div><span data-i18n="panelExpenses">Все расходы + налоги</span><strong class="negative">1,791,641 ₸</strong></div>
+                <div><span data-i18n="panelExpenseUnit">Расход / 1 шт</span><strong class="negative">3,052 ₸</strong></div>
               </div>
             </div>
             <div class="panel-product">
               <span class="thumb" aria-hidden="true"></span>
               <div>
-                <div class="product-name">Смартфон Apple iPhone 15 256Gb</div>
-                <div class="sku">Арт. 113137897</div>
+                <div class="product-name" data-i18n="demoProduct">Смартфон Apple iPhone 15 256Gb</div>
+                <div class="sku"><span data-i18n="skuShort">Арт.</span> 113137897</div>
               </div>
             </div>
-            <div class="soft-action">Расходы</div>
+            <div class="soft-action" data-i18n="expenses">Расходы</div>
             <div class="expense-card">
-              <div class="expense-head"><span></span><b>Все</b><em>Шт</em></div>
-              <div class="expense-row"><span>Доставка Kaspi</span><b>58,700 ₸</b><em>100 ₸</em></div>
-              <div class="expense-row"><span>Комиссия</span><b>1,138,897 ₸</b><em>1,940 ₸</em></div>
-              <div class="expense-row"><span>ИПН</span><b>417,944 ₸</b><em>712 ₸</em></div>
-              <div class="expense-row total"><span>Всего</span><b>1,791,641 ₸</b><em>3,052 ₸</em></div>
+              <div class="expense-head"><span></span><b data-i18n="all">Все</b><em data-i18n="unit">Шт</em></div>
+              <div class="expense-row"><span data-i18n="delivery">Доставка Kaspi</span><b>58,700 ₸</b><em>100 ₸</em></div>
+              <div class="expense-row"><span data-i18n="commission">Комиссия</span><b>1,138,897 ₸</b><em>1,940 ₸</em></div>
+              <div class="expense-row"><span data-i18n="tax">ИПН</span><b>417,944 ₸</b><em>712 ₸</em></div>
+              <div class="expense-row total"><span data-i18n="total">Всего</span><b>1,791,641 ₸</b><em>3,052 ₸</em></div>
             </div>
             <div class="panel-nav" aria-hidden="true">
               <span class="active"><svg viewBox="0 0 24 24"><path d="M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z"/><path d="M9 6h6M9 11h1M12 11h1M15 11h1M9 15h1M12 15h1M15 15h1"/></svg></span>
@@ -820,35 +860,35 @@
 
     <section class="signal">
       <div class="container signal-inner">
-        <div class="signal-item"><strong>Все / шт</strong><span>Расходы читаются сразу</span></div>
-        <div class="signal-item"><strong>Excel + PNG</strong><span>Готовые рабочие отчёты</span></div>
-        <div class="signal-item"><strong>A4 / Термо</strong><span>Накладные для печати</span></div>
+        <div class="signal-item"><strong data-i18n="signalCostTitle">Все / шт</strong><span data-i18n="signalCostText">Расходы читаются сразу</span></div>
+        <div class="signal-item"><strong>Excel + PNG</strong><span data-i18n="signalReportsText">Готовые рабочие отчёты</span></div>
+        <div class="signal-item"><strong data-i18n="signalPrintTitle">A4 / Термо</strong><span data-i18n="signalPrintText">Накладные для печати</span></div>
       </div>
     </section>
 
     <section class="section" id="functions">
       <div class="container section-layout">
         <div>
-          <p class="section-tag">Возможности</p>
-          <h2>Никаких лишних переключений</h2>
-          <p class="section-copy">Откройте товар, задайте свои расходы и получите результат в той же странице.</p>
+          <p class="section-tag" data-i18n="featuresTag">Возможности</p>
+          <h2 data-i18n="featuresTitle">Никаких лишних переключений</h2>
+          <p class="section-copy" data-i18n="featuresText">Откройте товар, задайте свои расходы и получите результат в той же странице.</p>
         </div>
         <div class="capabilities">
           <article class="capability">
-            <h3>Калькулятор</h3>
-            <p>Выручка, доход, расходы, комиссия категории, ИПН, маржа и ROI в компактном представлении.</p>
+            <h3 data-i18n="calculatorTitle">Калькулятор</h3>
+            <p data-i18n="calculatorText">Выручка, доход, расходы, комиссия категории, ИПН, маржа и ROI в компактном представлении.</p>
           </article>
           <article class="capability">
-            <h3>Профили</h3>
-            <p>Свои параметры для разных категорий, чтобы не вводить доставку и расходы заново.</p>
+            <h3 data-i18n="profilesTitle">Профили</h3>
+            <p data-i18n="profilesText">Свои параметры для разных категорий, чтобы не вводить доставку и расходы заново.</p>
           </article>
           <article class="capability">
-            <h3>История</h3>
-            <p>Сохранённые товары, фильтр по категориям и экспорт списка для сравнения в Excel.</p>
+            <h3 data-i18n="historyTitle">История</h3>
+            <p data-i18n="historyText">Сохранённые товары, фильтр по категориям и экспорт списка для сравнения в Excel.</p>
           </article>
           <article class="capability">
-            <h3>Магазин</h3>
-            <p>Merchant ID, ссылка на магазин и быстрый переход к товарам продавца.</p>
+            <h3 data-i18n="merchantTitle">Магазин</h3>
+            <p data-i18n="merchantText">Merchant ID, ссылка на магазин и быстрый переход к товарам продавца.</p>
           </article>
         </div>
       </div>
@@ -857,24 +897,24 @@
     <section class="section">
       <div class="container section-layout">
         <div>
-          <p class="section-tag">Результат</p>
-          <h2>Отчёты и печать без рутины</h2>
-          <p class="section-copy">Сохраняйте расчёт или собирайте накладные в удобный для печати PDF.</p>
+          <p class="section-tag" data-i18n="resultTag">Результат</p>
+          <h2 data-i18n="resultTitle">Отчёты и печать без рутины</h2>
+          <p class="section-copy" data-i18n="resultText">Сохраняйте расчёт или собирайте накладные в удобный для печати PDF.</p>
         </div>
         <div class="print-demo">
           <div class="demo-surface">
-            <span class="demo-title">Накладные</span>
-            <div class="drop-zone">Перетащите ZIP сюда<small>или выберите архив</small></div>
+            <span class="demo-title" data-i18n="invoicesTitle">Накладные</span>
+            <div class="drop-zone"><span data-i18n="dropTitle">Перетащите ZIP сюда</span><small data-i18n="dropHint">или выберите архив</small></div>
             <div class="layout-row">
-              <span class="selected">4 на 1</span><span>8 на 1</span><span>9 на 1</span><span>16 на 1</span>
+              <span class="selected" data-i18n="layout4">4 на 1</span><span data-i18n="layout8">8 на 1</span><span data-i18n="layout9">9 на 1</span><span data-i18n="layout16">16 на 1</span>
             </div>
           </div>
           <div class="demo-surface">
-            <span class="demo-title">Экспорт</span>
+            <span class="demo-title" data-i18n="exportTitle">Экспорт</span>
             <div class="export-row">
-              <div class="export-item"><span>Excel-отчёт</span><span>.xlsx</span></div>
-              <div class="export-item"><span>Фото-отчёт</span><span>.png</span></div>
-              <div class="export-item"><span>Фото товара</span><span>.zip</span></div>
+              <div class="export-item"><span data-i18n="excelReport">Excel-отчёт</span><span>.xlsx</span></div>
+              <div class="export-item"><span data-i18n="photoReport">Фото-отчёт</span><span>.png</span></div>
+              <div class="export-item"><span data-i18n="productPhotos">Фото товара</span><span>.zip</span></div>
             </div>
           </div>
         </div>
@@ -884,14 +924,14 @@
     <section class="section" id="privacy">
       <div class="container section-layout">
         <div>
-          <p class="section-tag">Приватность</p>
-          <h2>Рабочие данные остаются у вас</h2>
-          <p class="section-copy">Расширение создано для локальной обработки данных в браузере пользователя.</p>
+          <p class="section-tag" data-i18n="privacyTag">Приватность</p>
+          <h2 data-i18n="privacyTitle">Рабочие данные остаются у вас</h2>
+          <p class="section-copy" data-i18n="privacyText">Расширение создано для локальной обработки данных в браузере пользователя.</p>
         </div>
         <div class="privacy-list">
-          <div class="privacy-row"><span class="check">✓</span><span>Настройки, профили и история сохраняются локально через Chrome storage.</span></div>
-          <div class="privacy-row"><span class="check">✓</span><span>ZIP и PDF накладных обрабатываются на устройстве для формирования готового файла.</span></div>
-          <div class="privacy-row"><span class="check">✓</span><span>Пользовательские данные не продаются и не используются для персонализированной рекламы.</span></div>
+          <div class="privacy-row"><span class="check">✓</span><span data-i18n="privacyLocal">Настройки, профили и история сохраняются локально через Chrome storage.</span></div>
+          <div class="privacy-row"><span class="check">✓</span><span data-i18n="privacyFiles">ZIP и PDF накладных обрабатываются на устройстве для формирования готового файла.</span></div>
+          <div class="privacy-row"><span class="check">✓</span><span data-i18n="privacyAds">Пользовательские данные не продаются и не используются для персонализированной рекламы.</span></div>
         </div>
       </div>
     </section>
@@ -899,8 +939,11 @@
     <section class="cta">
       <div class="container">
         <h2>Kaspi Seller Lens</h2>
-        <p>Независимый инструмент для продавцов Kaspi. Не является официальным продуктом Kaspi.kz.</p>
-        <a class="button" href="mailto:r.zhandos256@gmail.com?subject=Kaspi%20Seller%20Lens">Связаться с автором</a>
+        <p data-i18n="ctaText">Независимый инструмент для продавцов Kaspi. Не является официальным продуктом Kaspi.kz.</p>
+        <div class="cta-actions">
+          <a class="button" href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer" data-i18n="heroInstall">Установить из Chrome Web Store</a>
+          <a class="button secondary" href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer" data-i18n="contactTelegram">Связаться в Telegram</a>
+        </div>
       </div>
     </section>
   </main>
@@ -909,10 +952,200 @@
     <div class="container footer-inner">
       <span>Kaspi Seller Lens (Unofficial) © 2026</span>
       <div class="footer-links">
-        <a href="docs/privacy-policy.html">Политика конфиденциальности</a>
-        <a href="mailto:r.zhandos256@gmail.com">r.zhandos256@gmail.com</a>
+        <a href="docs/privacy-policy.html" data-i18n="footerPolicy">Политика конфиденциальности</a>
+        <a href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer">Telegram: @digitalcraftzman</a>
       </div>
     </div>
   </footer>
+  <script>
+    (function () {
+      var COPY = {
+        ru: {
+          pageTitle: 'Kaspi Seller Lens (Unofficial) - расчеты для продавцов Kaspi',
+          pageDescription: 'Прибыль товара, расходы, история и печать накладных прямо на страницах Kaspi.',
+          navAria: 'Навигация',
+          languageAria: 'Язык',
+          navFunctions: 'Функции',
+          navPrivacy: 'Приватность',
+          navPolicy: 'Политика',
+          navInstall: 'Установить',
+          heroOverline: 'Рабочая панель продавца Kaspi',
+          heroLead: 'Прибыль, расходы, история товаров и накладные прямо на странице, где вы принимаете решение о продаже.',
+          heroInstall: 'Установить из Chrome Web Store',
+          heroTelegram: 'Написать в Telegram',
+          purposeTitle: 'Единая цель',
+          purposeText: 'Помочь продавцу быстро оценить прибыльность товара и подготовить связанные рабочие материалы.',
+          sceneAria: 'Kaspi Seller Lens поверх страницы товара Kaspi',
+          catalog: 'Каталог',
+          crumbShop: 'Kaspi Магазин',
+          crumbPhones: 'Телефоны',
+          crumbSmartphones: 'Смартфоны',
+          panelRevenue: 'Оценка выручки',
+          panelProfit: 'Доход после налогов',
+          panelProfitUnit: 'Доход / 1 шт',
+          panelExpenses: 'Все расходы + налоги',
+          panelExpenseUnit: 'Расход / 1 шт',
+          demoProduct: 'Смартфон Apple iPhone 15 256Gb',
+          skuShort: 'Арт.',
+          expenses: 'Расходы',
+          all: 'Все',
+          unit: 'Шт',
+          delivery: 'Доставка Kaspi',
+          commission: 'Комиссия',
+          tax: 'ИПН',
+          total: 'Всего',
+          signalCostTitle: 'Все / шт',
+          signalCostText: 'Расходы читаются сразу',
+          signalReportsText: 'Готовые рабочие отчеты',
+          signalPrintTitle: 'A4 / Термо',
+          signalPrintText: 'Накладные для печати',
+          featuresTag: 'Возможности',
+          featuresTitle: 'Никаких лишних переключений',
+          featuresText: 'Откройте товар, задайте свои расходы и получите результат в той же странице.',
+          calculatorTitle: 'Калькулятор',
+          calculatorText: 'Выручка, доход, расходы, комиссия категории, ИПН, маржа и ROI в компактном представлении.',
+          profilesTitle: 'Профили',
+          profilesText: 'Свои параметры для разных категорий, чтобы не вводить доставку и расходы заново.',
+          historyTitle: 'История',
+          historyText: 'Сохраненные товары, фильтр по категориям и экспорт списка для сравнения в Excel.',
+          merchantTitle: 'Магазин',
+          merchantText: 'Merchant ID, ссылка на магазин и быстрый переход к товарам продавца.',
+          resultTag: 'Результат',
+          resultTitle: 'Отчеты и печать без рутины',
+          resultText: 'Сохраняйте расчет или собирайте накладные в удобный для печати PDF.',
+          invoicesTitle: 'Накладные',
+          dropTitle: 'Перетащите ZIP сюда',
+          dropHint: 'или выберите архив',
+          layout4: '4 на 1',
+          layout8: '8 на 1',
+          layout9: '9 на 1',
+          layout16: '16 на 1',
+          exportTitle: 'Экспорт',
+          excelReport: 'Excel-отчет',
+          photoReport: 'Фото-отчет',
+          productPhotos: 'Фото товара',
+          privacyTag: 'Приватность',
+          privacyTitle: 'Рабочие данные остаются у вас',
+          privacyText: 'Расширение создано для локальной обработки данных в браузере пользователя.',
+          privacyLocal: 'Настройки, профили и история сохраняются локально через Chrome storage.',
+          privacyFiles: 'ZIP и PDF накладных обрабатываются на устройстве для формирования готового файла.',
+          privacyAds: 'Пользовательские данные не продаются и не используются для персонализированной рекламы.',
+          ctaText: 'Независимый инструмент для продавцов Kaspi. Не является официальным продуктом Kaspi.kz.',
+          contactTelegram: 'Связаться в Telegram',
+          footerPolicy: 'Политика конфиденциальности'
+        },
+        kk: {
+          pageTitle: 'Kaspi Seller Lens (Unofficial) - Kaspi сатушыларына арналған есеп',
+          pageDescription: 'Kaspi беттерінде тауар пайдасын, шығындарды, тарихты және жүкқұжат басып шығаруды басқарыңыз.',
+          navAria: 'Навигация',
+          languageAria: 'Тіл',
+          navFunctions: 'Мүмкіндіктер',
+          navPrivacy: 'Құпиялық',
+          navPolicy: 'Саясат',
+          navInstall: 'Орнату',
+          heroOverline: 'Kaspi сатушысының жұмыс панелі',
+          heroLead: 'Табыс, шығындар, тауар тарихы және жүкқұжаттар сату шешімін қабылдайтын бетте бірден көрінеді.',
+          heroInstall: 'Chrome Web Store-дан орнату',
+          heroTelegram: 'Telegram-ға жазу',
+          purposeTitle: 'Бір мақсат',
+          purposeText: 'Сатушыға тауардың пайдасын жылдам бағалауға және қажетті жұмыс материалдарын дайындауға көмектесу.',
+          sceneAria: 'Kaspi тауар бетінің үстіндегі Kaspi Seller Lens панелі',
+          catalog: 'Каталог',
+          crumbShop: 'Kaspi Магазин',
+          crumbPhones: 'Телефондар',
+          crumbSmartphones: 'Смартфондар',
+          panelRevenue: 'Болжамды кіріс',
+          panelProfit: 'Таза табыс',
+          panelProfitUnit: 'Табыс / дана',
+          panelExpenses: 'Шығындар + салық',
+          panelExpenseUnit: 'Шығын / дана',
+          demoProduct: 'Apple iPhone 15 256Gb смартфоны',
+          skuShort: 'Арт.',
+          expenses: 'Шығындар',
+          all: 'Барлығы',
+          unit: 'Дана',
+          delivery: 'Kaspi жеткізу',
+          commission: 'Комиссия',
+          tax: 'ЖТС',
+          total: 'Барлығы',
+          signalCostTitle: 'Барлығы / дана',
+          signalCostText: 'Шығындар бірден көрінеді',
+          signalReportsText: 'Дайын жұмыс есептері',
+          signalPrintTitle: 'A4 / Термо',
+          signalPrintText: 'Басып шығаруға жүкқұжаттар',
+          featuresTag: 'Мүмкіндіктер',
+          featuresTitle: 'Артық ауысу жоқ',
+          featuresText: 'Тауарды ашып, шығындарыңызды көрсетіңіз де, нәтижені сол беттен алыңыз.',
+          calculatorTitle: 'Калькулятор',
+          calculatorText: 'Кіріс, табыс, шығындар, санат комиссиясы, ЖТС, маржа және ROI ықшам түрде.',
+          profilesTitle: 'Профильдер',
+          profilesText: 'Әр санатқа өз параметрлеріңізді сақтап, жеткізу мен шығындарды қайта енгізбеңіз.',
+          historyTitle: 'Тарих',
+          historyText: 'Сақталған тауарлар, санат сүзгісі және Excel арқылы салыстыруға арналған экспорт.',
+          merchantTitle: 'Дүкен',
+          merchantText: 'Merchant ID, дүкен сілтемесі және сатушы тауарларына жылдам өту.',
+          resultTag: 'Нәтиже',
+          resultTitle: 'Есептер мен басып шығару оңай',
+          resultText: 'Есептеуді сақтаңыз немесе жүкқұжаттарды басып шығаруға ыңғайлы PDF-ке жинаңыз.',
+          invoicesTitle: 'Жүкқұжаттар',
+          dropTitle: 'ZIP файлын осында тастаңыз',
+          dropHint: 'немесе архивті таңдаңыз',
+          layout4: '4 бірге',
+          layout8: '8 бірге',
+          layout9: '9 бірге',
+          layout16: '16 бірге',
+          exportTitle: 'Экспорт',
+          excelReport: 'Excel есебі',
+          photoReport: 'Фото есеп',
+          productPhotos: 'Тауар фотосы',
+          privacyTag: 'Құпиялық',
+          privacyTitle: 'Жұмыс деректері сізде қалады',
+          privacyText: 'Кеңейтім деректерді пайдаланушы браузерінде жергілікті өңдеу үшін жасалған.',
+          privacyLocal: 'Баптаулар, профильдер және тарих Chrome storage ішінде жергілікті сақталады.',
+          privacyFiles: 'Жүкқұжаттардың ZIP және PDF файлдары дайын файл жасау үшін құрылғыда өңделеді.',
+          privacyAds: 'Пайдаланушы деректері сатылмайды және дербестендірілген жарнама үшін қолданылмайды.',
+          ctaText: 'Kaspi сатушыларына арналған тәуелсіз құрал. Kaspi.kz ресми өнімі емес.',
+          contactTelegram: 'Telegram арқылы байланысу',
+          footerPolicy: 'Құпиялық саясаты'
+        }
+      };
+
+      function setLanguage(lang) {
+        var selected = COPY[lang] ? lang : 'ru';
+        var dict = COPY[selected];
+        document.documentElement.lang = selected;
+        document.title = dict.pageTitle;
+        var description = document.querySelector('meta[name="description"]');
+        if (description) description.setAttribute('content', dict.pageDescription);
+        document.querySelectorAll('[data-i18n]').forEach(function (node) {
+          var text = dict[node.dataset.i18n];
+          if (text) node.textContent = text;
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (node) {
+          var text = dict[node.dataset.i18nAria];
+          if (text) node.setAttribute('aria-label', text);
+        });
+        document.querySelectorAll('.lang-switch button').forEach(function (button) {
+          button.classList.toggle('active', button.dataset.lang === selected);
+          button.setAttribute('aria-pressed', String(button.dataset.lang === selected));
+        });
+        try {
+          window.localStorage.setItem('ksl-landing-lang', selected);
+        } catch (error) {}
+      }
+
+      document.querySelectorAll('.lang-switch button').forEach(function (button) {
+        button.addEventListener('click', function () {
+          setLanguage(button.dataset.lang);
+        });
+      });
+
+      var storedLanguage = 'ru';
+      try {
+        storedLanguage = window.localStorage.getItem('ksl-landing-lang') || 'ru';
+      } catch (error) {}
+      setLanguage(storedLanguage);
+    })();
+  </script>
 </body>
 </html>
