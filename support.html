@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Поддержка - Kaspi Seller Lens (Unofficial)</title>
+  <meta name="description" content="Поддержка, реклама и сотрудничество с Kaspi Seller Lens (Unofficial) через Telegram.">
+  <link rel="icon" type="image/png" href="icons/icon32.png">
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f8f9fa;
+      --surface: #fff;
+      --ink: #111;
+      --text: #444;
+      --muted: #666;
+      --line: rgba(0, 0, 0, .12);
+      --soft-line: #e4e7e9;
+      --control: #eceff1;
+      --control-hover: #e3e7ea;
+      --font: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --content: 1000px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--page);
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+    }
+    a { color: inherit; text-decoration: none; }
+    svg { display: block; }
+    .container {
+      width: min(var(--content), calc(100% - 48px));
+      margin: 0 auto;
+    }
+    .site-header {
+      border-bottom: 1px solid var(--soft-line);
+      background: var(--page);
+    }
+    .header-inner {
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .brand {
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 760;
+    }
+    .brand img {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+    }
+    .top-nav {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .top-nav a:hover, .footer-links a:hover { color: var(--ink); }
+    .lang-switch {
+      display: inline-flex;
+      padding: 2px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--control);
+    }
+    .lang-switch button {
+      height: 30px;
+      min-width: 38px;
+      padding: 0 9px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font: 700 12px/1 var(--font);
+      cursor: pointer;
+    }
+    .lang-switch button.active {
+      background: var(--ink);
+      color: #fff;
+    }
+    .top-install {
+      height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 1px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      transition: background .16s ease;
+    }
+    .top-install:hover { color: #fff; background: #292929; }
+    .hero {
+      min-height: calc(100vh - 126px);
+      padding: clamp(60px, 11vh, 108px) 0 68px;
+      border-bottom: 1px solid var(--soft-line);
+      background: var(--surface);
+    }
+    .hero-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .overline {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+    }
+    h1 {
+      max-width: 650px;
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(42px, 6vw, 58px);
+      line-height: 1.06;
+      font-weight: 790;
+      letter-spacing: 0;
+    }
+    .lead {
+      max-width: 545px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.6;
+    }
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 11px;
+      margin-top: 34px;
+      padding: 0 25px;
+      border: 1px solid var(--ink);
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 720;
+      transition: background .16s ease, border-color .16s ease;
+    }
+    .button:hover { background: #292929; border-color: #292929; }
+    .button svg {
+      width: 18px;
+      height: 18px;
+    }
+    .topics {
+      width: min(760px, 100%);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 55px;
+    }
+    .topic {
+      min-height: 147px;
+      padding: 22px 21px;
+      border: 1px solid var(--soft-line);
+      border-radius: 8px;
+      background: var(--page);
+      text-align: left;
+    }
+    .topic-icon {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      border-radius: 8px;
+      background: var(--ink);
+      color: #fff;
+    }
+    .topic-icon svg {
+      width: 17px;
+      height: 17px;
+    }
+    .topic h2 {
+      margin: 0 0 6px;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 740;
+    }
+    .topic p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .telegram-id {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 35px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .telegram-id span {
+      color: var(--ink);
+      font-weight: 720;
+    }
+    footer {
+      padding: 27px 0 31px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: 600;
+    }
+    @media (max-width: 720px) {
+      .container { width: calc(100% - 32px); }
+      .header-inner { min-height: 62px; gap: 10px; }
+      .brand span { display: none; }
+      .top-nav { gap: 8px; }
+      .top-nav > a:not(.top-install) { display: none; }
+      .top-install { height: 35px; padding: 0 11px; font-size: 12px; }
+      .hero {
+        min-height: 0;
+        padding: 49px 0 48px;
+      }
+      h1 { font-size: clamp(33px, 10vw, 42px); }
+      .lead { font-size: 15px; }
+      .button { width: 100%; margin-top: 29px; }
+      .topics {
+        grid-template-columns: 1fr;
+        margin-top: 39px;
+      }
+      .topic {
+        min-height: 0;
+        padding: 18px;
+      }
+      .topic-icon { margin-bottom: 12px; }
+      .telegram-id { margin-top: 28px; }
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="landing.html" aria-label="Kaspi Seller Lens (Unofficial)">
+        <img src="icons/icon32.png" alt="">
+        <span>Kaspi Seller Lens (Unofficial)</span>
+      </a>
+      <nav class="top-nav" data-i18n-aria="navAria" aria-label="Навигация">
+        <a href="landing.html" data-i18n="navHome">Главная</a>
+        <a href="docs/privacy-policy.html" data-i18n="navPolicy">Политика</a>
+        <div class="lang-switch" role="group" aria-label="Язык" data-i18n-aria="languageAria">
+          <button type="button" data-lang="kk" aria-pressed="false">KZ</button>
+          <button type="button" class="active" data-lang="ru" aria-pressed="true">RU</button>
+        </div>
+        <a class="top-install" href="https://chromewebstore.google.com/detail/kaspi-seller-lens-unoffic/jmfjadigpopeegfclpbimbobblajdckc" target="_blank" rel="noopener noreferrer" data-i18n="navInstall">Установить</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="hero">
+    <div class="container hero-inner">
+      <p class="overline" data-i18n="overline">Связь с автором</p>
+      <h1 data-i18n="title">Поддержка и сотрудничество</h1>
+      <p class="lead" data-i18n="lead">Напишите в Telegram, если нужен рекламный баннер в расширении, есть вопрос по работе Kaspi Seller Lens или идея сотрудничества.</p>
+      <a class="button" href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2 11 13"></path>
+          <path d="m22 2-7 20-4-9-9-4Z"></path>
+        </svg>
+        <span data-i18n="writeTelegram">Написать в Telegram</span>
+      </a>
+
+      <div class="topics">
+        <article class="topic">
+          <div class="topic-icon">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 11v2"></path>
+              <path d="M6 9v6"></path>
+              <path d="M10 7v10"></path>
+              <path d="M14 4v16"></path>
+              <path d="M18 8v8"></path>
+              <path d="M22 10v4"></path>
+            </svg>
+          </div>
+          <h2 data-i18n="adsTitle">Реклама</h2>
+          <p data-i18n="adsText">Размещение баннера для аудитории продавцов Kaspi.</p>
+        </article>
+        <article class="topic">
+          <div class="topic-icon">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </div>
+          <h2 data-i18n="questionsTitle">Вопросы</h2>
+          <p data-i18n="questionsText">Помощь с функциями, расчётами и настройкой расширения.</p>
+        </article>
+        <article class="topic">
+          <div class="topic-icon">
+            <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-8 0v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+              <path d="M19 8v6"></path>
+              <path d="M22 11h-6"></path>
+            </svg>
+          </div>
+          <h2 data-i18n="partnerTitle">Сотрудничество</h2>
+          <p data-i18n="partnerText">Предложения для сервисов и решений, полезных селлерам.</p>
+        </article>
+      </div>
+
+      <div class="telegram-id">
+        <span>Telegram</span>
+        <a href="https://t.me/digitalcraftzman" target="_blank" rel="noopener noreferrer">@digitalcraftzman</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <span>Kaspi Seller Lens (Unofficial) © 2026</span>
+      <div class="footer-links">
+        <a href="landing.html" data-i18n="navHome">Главная</a>
+        <a href="docs/privacy-policy.html" data-i18n="navPolicy">Политика</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var COPY = {
+        ru: {
+          pageTitle: 'Поддержка - Kaspi Seller Lens (Unofficial)',
+          pageDescription: 'Поддержка, реклама и сотрудничество с Kaspi Seller Lens (Unofficial) через Telegram.',
+          navAria: 'Навигация',
+          languageAria: 'Язык',
+          navHome: 'Главная',
+          navPolicy: 'Политика',
+          navInstall: 'Установить',
+          overline: 'Связь с автором',
+          title: 'Поддержка и сотрудничество',
+          lead: 'Напишите в Telegram, если нужен рекламный баннер в расширении, есть вопрос по работе Kaspi Seller Lens или идея сотрудничества.',
+          writeTelegram: 'Написать в Telegram',
+          adsTitle: 'Реклама',
+          adsText: 'Размещение баннера для аудитории продавцов Kaspi.',
+          questionsTitle: 'Вопросы',
+          questionsText: 'Помощь с функциями, расчетами и настройкой расширения.',
+          partnerTitle: 'Сотрудничество',
+          partnerText: 'Предложения для сервисов и решений, полезных селлерам.'
+        },
+        kk: {
+          pageTitle: 'Қолдау - Kaspi Seller Lens (Unofficial)',
+          pageDescription: 'Kaspi Seller Lens (Unofficial) бойынша қолдау, жарнама және ынтымақтастық Telegram арқылы.',
+          navAria: 'Навигация',
+          languageAria: 'Тіл',
+          navHome: 'Басты бет',
+          navPolicy: 'Саясат',
+          navInstall: 'Орнату',
+          overline: 'Автормен байланыс',
+          title: 'Қолдау және ынтымақтастық',
+          lead: 'Кеңейтімде жарнама орналастыру керек болса, Kaspi Seller Lens жұмысы бойынша сұрағыңыз немесе ынтымақтастық идеяңыз болса, Telegram-ға жазыңыз.',
+          writeTelegram: 'Telegram-ға жазу',
+          adsTitle: 'Жарнама',
+          adsText: 'Kaspi сатушылары аудиториясына баннер орналастыру.',
+          questionsTitle: 'Сұрақтар',
+          questionsText: 'Кеңейтім функциялары, есептеулер және баптау бойынша көмек.',
+          partnerTitle: 'Ынтымақтастық',
+          partnerText: 'Сатушыларға пайдалы сервистер мен шешімдер бойынша ұсыныстар.'
+        }
+      };
+      function setLanguage(lang) {
+        var selected = COPY[lang] ? lang : 'ru';
+        var dict = COPY[selected];
+        document.documentElement.lang = selected;
+        document.title = dict.pageTitle;
+        var description = document.querySelector('meta[name="description"]');
+        if (description) description.setAttribute('content', dict.pageDescription);
+        document.querySelectorAll('[data-i18n]').forEach(function (node) {
+          if (dict[node.dataset.i18n]) node.textContent = dict[node.dataset.i18n];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (node) {
+          if (dict[node.dataset.i18nAria]) node.setAttribute('aria-label', dict[node.dataset.i18nAria]);
+        });
+        document.querySelectorAll('.lang-switch button').forEach(function (button) {
+          var active = button.dataset.lang === selected;
+          button.classList.toggle('active', active);
+          button.setAttribute('aria-pressed', String(active));
+        });
+        try { window.localStorage.setItem('ksl-landing-lang', selected); } catch (error) {}
+      }
+      document.querySelectorAll('.lang-switch button').forEach(function (button) {
+        button.addEventListener('click', function () { setLanguage(button.dataset.lang); });
+      });
+      var storedLanguage = 'ru';
+      try { storedLanguage = window.localStorage.getItem('ksl-landing-lang') || 'ru'; } catch (error) {}
+      setLanguage(storedLanguage);
+    })();
+  </script>
+</body>
+</html>
