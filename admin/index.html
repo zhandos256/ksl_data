@@ -1,99 +1,91 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KSL Ads JSON Generator</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KSL Ads Generator</title>
   <style>
     :root {
-      --bg: #F8F9FA;
-      --surface: #FFFFFF;
-      --ink: #111111;
-      --text: #3F3F46;
-      --muted: #737373;
-      --border: #E5E7EB;
-      --soft: #F0F1F3;
-      --accent: #0A84FF;
-      --success: #1A7F37;
-      --danger: #B42318;
-      --shadow: 0 18px 50px rgba(17, 17, 17, .10);
-      --radius: 18px;
-      --banner-height: 75px;
-      --banner-radius: 14px;
-      --gap: 8px;
+      --page: #f5f6f7;
+      --surface: #fff;
+      --ink: #111;
+      --text: #444;
+      --muted: #777;
+      --line: rgba(17, 24, 39, .10);
+      --control: #eef0f2;
+      --control-hover: #e6e9ec;
+      --success: #1a7f37;
+      --danger: #b42318;
+      --shadow: 0 18px 46px rgba(17, 24, 39, .10);
+      --font: Onest, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
-      color: var(--ink);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--page);
+      color: var(--text);
+      font-family: var(--font);
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
-      padding: 28px;
+    }
+
+    button,
+    input,
+    textarea {
+      font: inherit;
     }
 
     .page {
-      width: min(1040px, 100%);
+      width: min(1180px, calc(100% - 48px));
       margin: 0 auto;
+      padding: 28px 0;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 380px;
-      gap: 16px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(360px, .8fr);
+      gap: 28px;
       align-items: start;
     }
 
-    .card {
+    .panel {
+      border-radius: 22px;
       background: var(--surface);
-      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      padding: 18px;
-      min-width: 0;
-    }
-
-    .head {
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 14px;
-    }
-
-    h1, h2 {
-      margin: 0;
-      line-height: 1.15;
-      letter-spacing: 0;
+      padding: 28px;
     }
 
     h1 {
-      font-size: 22px;
-      font-weight: 850;
+      margin: 0 0 12px;
+      color: var(--ink);
+      font-size: 28px;
+      line-height: 1.08;
+      letter-spacing: 0;
     }
 
-    h2 {
-      font-size: 15px;
-      font-weight: 850;
-      margin-bottom: 10px;
-    }
-
-    .desc {
-      margin: 7px 0 0;
+    .lead {
+      margin: 0 0 24px;
       color: var(--muted);
-      font-size: 13px;
-      font-weight: 550;
-      line-height: 1.4;
+      font-size: 16px;
+      font-weight: 650;
+      line-height: 1.35;
+    }
+
+    .section-line {
+      height: 1px;
+      margin: 0 0 24px;
+      background: var(--line);
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
+      gap: 16px 18px;
     }
 
     .field {
+      display: grid;
+      gap: 7px;
       min-width: 0;
     }
 
@@ -101,475 +93,462 @@
       grid-column: 1 / -1;
     }
 
-    label {
+    .label-row {
       display: flex;
-      align-items: baseline;
       justify-content: space-between;
-      gap: 8px;
+      gap: 12px;
       color: var(--text);
-      font-size: 12px;
-      font-weight: 800;
-      margin-bottom: 6px;
-    }
-
-    .hint {
-      display: block;
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 600;
-      line-height: 1.3;
+      font-size: 13px;
+      font-weight: 850;
     }
 
     .counter {
       color: var(--muted);
-      font-size: 11px;
-      font-weight: 750;
-      font-variant-numeric: tabular-nums;
+      font-weight: 800;
       white-space: nowrap;
     }
 
-    .counter.is-limit {
+    .counter.is-full {
       color: var(--danger);
     }
 
-    input[type="text"],
-    input[type="url"],
-    input[type="number"],
+    input,
     textarea {
       width: 100%;
-      border: 1px solid transparent;
+      border: 0;
       border-radius: 12px;
-      background: var(--soft);
+      background: var(--control);
       color: var(--ink);
-      padding: 10px 12px;
-      font-size: 13px;
-      font-weight: 650;
       outline: none;
-      transition: border-color .16s ease, background .16s ease;
+      padding: 0 14px;
+      font-weight: 760;
+      box-shadow: inset 0 0 0 1px transparent;
+    }
+
+    input {
+      height: 44px;
     }
 
     textarea {
-      min-height: 74px;
+      min-height: 86px;
+      padding-top: 12px;
       resize: vertical;
-      line-height: 1.35;
+      line-height: 1.3;
     }
 
     input:focus,
     textarea:focus {
-      border-color: rgba(10, 132, 255, .55);
-      background: #FFFFFF;
+      box-shadow: inset 0 0 0 2px rgba(17, 24, 39, .18);
     }
 
     input[type="color"] {
-      width: 100%;
-      height: 42px;
-      border: 0;
       padding: 0;
-      background: transparent;
+      height: 46px;
+      overflow: hidden;
       cursor: pointer;
     }
 
-    input[type="color"]::-webkit-color-swatch-wrapper {
-      padding: 0;
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.3;
     }
 
-    input[type="color"]::-webkit-color-swatch {
-      border: 1px solid var(--border);
-      border-radius: 12px;
+    .top-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 16px;
     }
 
-    .toggle-row {
+    .switch-card {
+      min-height: 64px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      padding: 10px 12px;
-      background: var(--soft);
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 800;
+      gap: 14px;
+      border-radius: 14px;
+      background: var(--control);
+      padding: 12px 14px;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 850;
     }
 
     .switch {
       position: relative;
-      width: 42px;
-      height: 24px;
-      flex-shrink: 0;
+      width: 54px;
+      height: 30px;
+      flex: 0 0 auto;
     }
 
     .switch input {
+      position: absolute;
       opacity: 0;
-      width: 0;
-      height: 0;
+      width: 1px;
+      height: 1px;
     }
 
-    .switch span {
+    .slider {
       position: absolute;
       inset: 0;
       border-radius: 999px;
-      background: #D8DADD;
+      background: #c8ccd0;
+      cursor: pointer;
       transition: background .16s ease;
     }
 
-    .switch span::before {
+    .slider::after {
       content: "";
       position: absolute;
-      width: 18px;
-      height: 18px;
+      width: 24px;
+      height: 24px;
       top: 3px;
       left: 3px;
       border-radius: 999px;
-      background: #FFFFFF;
+      background: #fff;
       transition: transform .16s ease;
-      box-shadow: 0 2px 6px rgba(0,0,0,.16);
+      box-shadow: 0 2px 7px rgba(0, 0, 0, .22);
     }
 
-    .switch input:checked + span {
-      background: var(--ink);
+    .switch input:checked + .slider {
+      background: #111;
     }
 
-    .switch input:checked + span::before {
-      transform: translateX(18px);
+    .switch input:checked + .slider::after {
+      transform: translateX(24px);
     }
 
-    .preset-row {
+    .quick {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
+      gap: 9px;
+      margin-top: 16px;
     }
 
-    .preset {
+    .chip {
+      min-height: 34px;
       border: 0;
       border-radius: 999px;
-      background: var(--soft);
+      padding: 0 14px;
+      background: var(--control);
       color: var(--ink);
-      padding: 7px 10px;
-      font-size: 11px;
-      font-weight: 800;
-      cursor: pointer;
-    }
-
-    .preview-card {
-      position: sticky;
-      top: 18px;
-    }
-
-    .panel-preview {
-      width: 300px;
-      margin: 0 auto;
-      border-radius: 28px;
-      background: #F8F9FA;
-      border: 1px solid #DADCE0;
-      padding: 12px 10px;
-      box-shadow: 0 18px 48px rgba(0,0,0,.12);
-    }
-
-    .preview-label {
-      margin: 0 0 8px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-
-    .ksl-banner-slot {
-      position: relative;
-      overflow: hidden;
-      height: var(--banner-height);
-      min-height: var(--banner-height);
-      max-height: var(--banner-height);
-      border-radius: var(--banner-radius);
-      padding: 8px 14px 5px;
-      color: #FFFFFF;
-      cursor: pointer;
-    }
-
-    .ksl-banner-inner {
-      height: 100%;
-      min-width: 0;
-    }
-
-    .ksl-banner-text {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      min-width: 0;
-    }
-
-    .ksl-banner-tag {
-      max-width: 100%;
-      border-radius: 6px;
-      padding: 2px 7px;
-      background: rgba(255, 255, 255, .18);
-      color: #FFFFFF;
-      font-size: 9px;
-      font-weight: 850;
-      line-height: 1.1;
-      text-transform: uppercase;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      letter-spacing: 0;
-      margin-bottom: 4px;
-    }
-
-    .ksl-banner-title {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      max-width: 100%;
-      overflow: hidden;
-      color: #FFFFFF;
-      font-size: 12.5px;
-      font-weight: 800;
-      line-height: 1.18;
-    }
-
-    .ksl-banner-desc {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      max-width: 100%;
-      margin-top: 2px;
-      overflow: hidden;
-      color: rgba(255, 255, 255, .9);
-      font-size: 10px;
-      font-weight: 650;
-      line-height: 1.16;
-    }
-
-    .ksl-banner-dots {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      margin-top: auto;
-      align-self: center;
-      padding-top: 2px;
-    }
-
-    .ksl-banner-dot {
-      width: 5px;
-      height: 5px;
-      border: 0;
-      border-radius: 999px;
-      padding: 0;
-      background: rgba(255, 255, 255, .42);
-    }
-
-    .ksl-banner-dot.active {
-      width: 13px;
-      background: #FFFFFF;
-    }
-
-    .output-tabs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 14px 0 8px;
-    }
-
-    .tab-btn {
-      border: 0;
-      border-radius: 12px;
-      background: var(--soft);
-      color: var(--ink);
-      height: 34px;
       font-size: 12px;
       font-weight: 850;
       cursor: pointer;
     }
 
-    .tab-btn.active {
-      background: var(--ink);
-      color: #FFFFFF;
+    .chip:hover {
+      background: var(--control-hover);
+    }
+
+    .preview-title {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .preview-shell {
+      width: 360px;
+      max-width: 100%;
+      margin: 0 auto 18px;
+      padding: 22px 22px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: #f8f9fa;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ad-preview {
+      width: 300px;
+      height: 75px;
+      position: relative;
+      overflow: hidden;
+      border: 0;
+      border-radius: 18px;
+      background: linear-gradient(105deg, #141414 0%, #ffb43f 100%);
+      color: #fff;
+      padding: 8px 34px 10px 14px;
+      cursor: pointer;
+    }
+
+    .ad-preview::after {
+      content: "›";
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: rgba(255, 255, 255, .74);
+      font-size: 30px;
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .ad-tag {
+      display: block;
+      width: max-content;
+      max-width: 128px;
+      margin-bottom: 3px;
+      padding: 1px 5px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, .18);
+      color: rgba(255, 255, 255, .84);
+      font-size: 9px;
+      font-weight: 900;
+      line-height: 1.05;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .ad-title {
+      display: block;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+      line-height: 1.04;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    .ad-desc {
+      display: block;
+      margin-top: 3px;
+      color: rgba(255, 255, 255, .90);
+      font-size: 9.8px;
+      font-weight: 700;
+      line-height: 1.08;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .tab {
+      height: 38px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--control);
+      color: var(--ink);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .tab.is-active {
+      background: #111;
+      color: #fff;
     }
 
     pre {
+      min-height: 262px;
       margin: 0;
-      min-height: 238px;
-      max-height: 360px;
-      overflow: auto;
-      border-radius: 14px;
-      background: #111111;
-      color: #D9F99D;
-      padding: 14px;
-      font: 12px/1.45 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      padding: 18px;
+      border-radius: 16px;
+      background: #101010;
+      color: #d8ef9c;
+      font: 700 13px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
     .actions {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 14px;
     }
 
     .btn {
+      height: 44px;
       border: 0;
       border-radius: 12px;
-      background: var(--ink);
-      color: #FFFFFF;
-      height: 38px;
-      padding: 0 12px;
-      font-size: 12px;
-      font-weight: 850;
+      background: #111;
+      color: #fff;
+      font-weight: 900;
       cursor: pointer;
     }
 
     .btn.secondary {
-      background: var(--soft);
+      background: var(--control);
       color: var(--ink);
     }
 
     .status {
       min-height: 18px;
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .status.ok {
+      margin-top: 10px;
       color: var(--success);
+      font-size: 12px;
+      font-weight: 900;
     }
 
-    .status.bad {
+    .is-error {
       color: var(--danger);
     }
 
-    @media (max-width: 860px) {
-      body {
-        padding: 14px;
-      }
-
+    @media (max-width: 900px) {
       .page {
         grid-template-columns: 1fr;
       }
-
-      .preview-card {
-        position: static;
+      .panel {
+        padding: 22px;
       }
+    }
 
-      .panel-preview {
-        width: min(300px, 100%);
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 24px, 1180px);
+        padding: 12px 0;
+      }
+      .grid,
+      .top-row,
+      .actions {
+        grid-template-columns: 1fr;
+      }
+      .preview-shell {
+        padding: 16px;
       }
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <section class="card">
-      <div class="head">
-        <h1>KSL Ads Generator</h1>
-        <p class="desc">Генерирует безопасный JSON для `data/ads.json` и remote `ksl_data/main/data/ads.json`. Лимиты совпадают с `src/ads.js` и `docs/ADS.md`.</p>
+    <section class="panel">
+      <h1>KSL Ads Generator</h1>
+      <p class="lead">Генерирует безопасный JSON для <code>data/ads.json</code> и remote <code>ksl_data/main/data/ads.json</code>. Лимиты совпадают с <code>src/ads.js</code>.</p>
+      <div class="section-line"></div>
+
+      <div class="top-row">
+        <div>
+          <div class="switch-card">
+            <span>Баннер включён</span>
+            <label class="switch" aria-label="Баннер включён">
+              <input id="enabled" type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+          <div class="hint">`enabled:false` скрывает баннер без удаления из JSON.</div>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label for="interval">Ротация</label>
+            <span class="counter">3–30 сек</span>
+          </div>
+          <input id="interval" type="number" min="3" max="30" step="1" value="5">
+          <div class="hint">Используется только в полном `ads.json`.</div>
+        </div>
       </div>
 
       <div class="grid">
         <div class="field">
-          <div class="toggle-row">
-            <span>Баннер включён</span>
-            <label class="switch" aria-label="Баннер включён">
-              <input type="checkbox" id="enabled" checked>
-              <span></span>
-            </label>
+          <div class="label-row">
+            <label for="tag">Tag</label>
+            <span class="counter" data-counter="tag">0 / 14</span>
           </div>
-          <span class="hint">`enabled:false` скрывает баннер без удаления из JSON.</span>
+          <input id="tag" maxlength="14" value="Реклама">
+          <div class="hint">Короткий badge сверху: `Сервис`, `Партнёр`, `Реклама`.</div>
         </div>
 
         <div class="field">
-          <label for="interval">Ротация <span class="counter">3–30 сек</span></label>
-          <input type="number" id="interval" min="3" max="30" value="6">
-          <span class="hint">Используется только в полном `ads.json`.</span>
-        </div>
-
-        <div class="field">
-          <label for="tag">Tag <span class="counter" id="tagCount">0 / 18</span></label>
-          <input type="text" id="tag" maxlength="18" value="Реклама">
-          <span class="hint">Короткий badge сверху. Например: `Сервис`, `Партнёр`, `Реклама`.</span>
-        </div>
-
-        <div class="field">
-          <label for="url">URL <span class="counter" id="urlStatus">https/http/mailto</span></label>
-          <input type="url" id="url" value="https://t.me/zhandos256">
-          <span class="hint">Разрешены только `https://`, `http://`, `mailto:`.</span>
-        </div>
-
-        <div class="field full">
-          <label for="title">Title <span class="counter" id="titleCount">0 / 44</span></label>
-          <input type="text" id="title" maxlength="44" value="Здесь может быть ваша реклама">
-          <span class="hint">Главная фраза. В UI максимум 2 строки, поэтому лучше писать коротко.</span>
-        </div>
-
-        <div class="field full">
-          <label for="description">Description <span class="counter" id="descriptionCount">0 / 86</span></label>
-          <textarea id="description" maxlength="86">Разместите вашу рекламу на 1000+ селлеров Kaspi</textarea>
-          <span class="hint">Описание видно под title. Важно: без длинной “простыни”, максимум 2 строки.</span>
-        </div>
-
-        <div class="field">
-          <label for="from">Gradient from</label>
-          <input type="color" id="from" value="#141414">
-        </div>
-
-        <div class="field">
-          <label for="to">Gradient to</label>
-          <input type="color" id="to" value="#2C2D30">
-        </div>
-
-        <div class="field full">
-          <span class="hint">Быстрые темы:</span>
-          <div class="preset-row">
-            <button type="button" class="preset" data-from="#0A84FF" data-to="#0056B3">KSL blue</button>
-            <button type="button" class="preset" data-from="#141414" data-to="#2C2D30">Dark</button>
-            <button type="button" class="preset" data-from="#1A7F37" data-to="#0F5132">Green</button>
-            <button type="button" class="preset" data-from="#B42318" data-to="#7A271A">Red</button>
+          <div class="label-row">
+            <label for="url">URL</label>
+            <span class="counter" id="urlState">OK</span>
           </div>
+          <input id="url" value="https://t.me/zhandos256">
+          <div class="hint">Разрешены только `https://`, `http://`, `mailto:`.</div>
         </div>
+
+        <div class="field full">
+          <div class="label-row">
+            <label for="title">Title</label>
+            <span class="counter" data-counter="title">0 / 32</span>
+          </div>
+          <input id="title" maxlength="32" value="Здесь может быть ваша реклама">
+          <div class="hint">Главная фраза. Лучше писать коротко, чтобы не давило на preview.</div>
+        </div>
+
+        <div class="field full">
+          <div class="label-row">
+            <label for="description">Description</label>
+            <span class="counter" data-counter="description">0 / 54</span>
+          </div>
+          <textarea id="description" maxlength="54">Разместите вашу рекламу на 1000+ селлеров Kaspi</textarea>
+          <div class="hint">Описание видно под title. Максимум 2 строки в баннере.</div>
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label for="from">Gradient from</label>
+            <span class="counter" id="fromText">#141414</span>
+          </div>
+          <input id="from" type="color" value="#141414">
+        </div>
+
+        <div class="field">
+          <div class="label-row">
+            <label for="to">Gradient to</label>
+            <span class="counter" id="toText">#FFB43F</span>
+          </div>
+          <input id="to" type="color" value="#ffb43f">
+        </div>
+      </div>
+
+      <div class="quick" aria-label="Быстрые темы">
+        <button class="chip" type="button" data-from="#141414" data-to="#FFB43F">Gold</button>
+        <button class="chip" type="button" data-from="#141414" data-to="#9DACA8">Dark mint</button>
+        <button class="chip" type="button" data-from="#0A84FF" data-to="#0056B3">KSL blue</button>
+        <button class="chip" type="button" data-from="#34C759" data-to="#0A8F3C">Green</button>
+        <button class="chip" type="button" data-from="#FF3B30" data-to="#C1271A">Red</button>
       </div>
     </section>
 
-    <aside class="card preview-card">
-      <p class="preview-label">Preview 300px / 75px</p>
-      <div class="panel-preview">
-        <div class="ksl-banner-slot" id="bannerSlot">
-          <div class="ksl-banner-inner">
-            <div class="ksl-banner-text">
-              <span class="ksl-banner-tag" id="previewTag"></span>
-              <span class="ksl-banner-title" id="previewTitle"></span>
-              <span class="ksl-banner-desc" id="previewDescription"></span>
-              <div class="ksl-banner-dots">
-                <button type="button" class="ksl-banner-dot active" aria-label="Баннер 1"></button>
-                <button type="button" class="ksl-banner-dot" aria-label="Баннер 2"></button>
-              </div>
-            </div>
-          </div>
+    <aside class="panel">
+      <h2 class="preview-title">Preview 300px / 75px</h2>
+      <div class="preview-shell">
+        <div class="ad-preview" id="preview">
+          <span class="ad-tag" id="previewTag"></span>
+          <span class="ad-title" id="previewTitle"></span>
+          <span class="ad-desc" id="previewDesc"></span>
         </div>
       </div>
 
-      <div class="output-tabs">
-        <button type="button" class="tab-btn active" id="blockTab">Banners[]</button>
-        <button type="button" class="tab-btn" id="fileTab">ads.json</button>
+      <div class="tabs">
+        <button class="tab is-active" type="button" data-output="banner">Banners[]</button>
+        <button class="tab" type="button" data-output="full">ads.json</button>
       </div>
-      <pre id="jsonOutput"></pre>
+
+      <pre id="output"></pre>
+
       <div class="actions">
-        <button type="button" class="btn" id="copyBtn">Копировать</button>
-        <button type="button" class="btn secondary" id="downloadBtn">Скачать JSON</button>
+        <button class="btn" type="button" id="copyBtn">Копировать</button>
+        <button class="btn secondary" type="button" id="downloadBtn">Скачать JSON</button>
       </div>
-      <div class="status" id="status"></div>
+      <div class="status" id="status">JSON готов к вставке.</div>
     </aside>
   </main>
 
   <script>
-    const LIMITS = { tag: 18, title: 44, description: 86 };
-    const FALLBACK_THEME = { from: '#0A84FF', to: '#0056B3' };
-    let outputMode = 'block';
+    const LIMITS = {
+      tag: 14,
+      title: 32,
+      description: 54
+    };
 
-    const inputs = {
+    const state = {
+      outputMode: 'banner'
+    };
+
+    const els = {
       enabled: document.getElementById('enabled'),
       interval: document.getElementById('interval'),
       tag: document.getElementById('tag'),
@@ -577,34 +556,27 @@
       description: document.getElementById('description'),
       url: document.getElementById('url'),
       from: document.getElementById('from'),
-      to: document.getElementById('to')
+      to: document.getElementById('to'),
+      fromText: document.getElementById('fromText'),
+      toText: document.getElementById('toText'),
+      urlState: document.getElementById('urlState'),
+      preview: document.getElementById('preview'),
+      previewTag: document.getElementById('previewTag'),
+      previewTitle: document.getElementById('previewTitle'),
+      previewDesc: document.getElementById('previewDesc'),
+      output: document.getElementById('output'),
+      status: document.getElementById('status'),
+      copyBtn: document.getElementById('copyBtn'),
+      downloadBtn: document.getElementById('downloadBtn')
     };
 
-    const preview = {
-      slot: document.getElementById('bannerSlot'),
-      tag: document.getElementById('previewTag'),
-      title: document.getElementById('previewTitle'),
-      description: document.getElementById('previewDescription')
-    };
+    function limitValue(input, limit) {
+      if (input.value.length > limit) input.value = input.value.slice(0, limit);
+    }
 
-    const counters = {
-      tag: document.getElementById('tagCount'),
-      title: document.getElementById('titleCount'),
-      description: document.getElementById('descriptionCount'),
-      url: document.getElementById('urlStatus')
-    };
-
-    const output = document.getElementById('jsonOutput');
-    const status = document.getElementById('status');
-    const blockTab = document.getElementById('blockTab');
-    const fileTab = document.getElementById('fileTab');
-
-    function compactText(value, limit) {
-      const text = String(value || '').replace(/\s+/g, ' ').trim();
-      if (text.length <= limit) return text;
-      const sliced = text.slice(0, limit + 1);
-      const cut = sliced.lastIndexOf(' ');
-      return (cut > limit * 0.55 ? sliced.slice(0, cut) : text.slice(0, limit)).trim();
+    function normalizeHex(value) {
+      const hex = String(value || '').trim();
+      return /^#[0-9a-fA-F]{6}$/.test(hex) ? hex.toUpperCase() : '#141414';
     }
 
     function safeUrl(value) {
@@ -618,131 +590,129 @@
       }
     }
 
-    function safeColor(value, fallback) {
-      const color = String(value || '').trim().toUpperCase();
-      return /^#[0-9A-F]{6}$/i.test(color) ? color : fallback;
-    }
-
-    function normalizeInterval(value) {
-      return Math.max(3, Math.min(30, Number(value) || 6));
+    function clampInterval(value) {
+      const number = Number(value) || 5;
+      return Math.max(3, Math.min(30, Math.round(number)));
     }
 
     function getBanner() {
-      const tag = compactText(inputs.tag.value || 'Сервис', LIMITS.tag);
-      const title = compactText(inputs.title.value, LIMITS.title);
-      const description = compactText(inputs.description.value, LIMITS.description);
       return {
-        enabled: inputs.enabled.checked,
-        tag,
-        title,
-        description,
-        url: safeUrl(inputs.url.value),
+        enabled: els.enabled.checked,
+        tag: els.tag.value.trim() || 'Реклама',
+        title: els.title.value.trim(),
+        description: els.description.value.trim(),
+        url: safeUrl(els.url.value),
         theme: {
-          from: safeColor(inputs.from.value, FALLBACK_THEME.from),
-          to: safeColor(inputs.to.value, FALLBACK_THEME.to)
+          from: normalizeHex(els.from.value),
+          to: normalizeHex(els.to.value)
         }
       };
     }
 
-    function getFullConfig() {
+    function getFullJson() {
       return {
-        intervalSeconds: normalizeInterval(inputs.interval.value),
+        intervalSeconds: clampInterval(els.interval.value),
         banners: [getBanner()]
       };
     }
 
-    function updateCounter(key) {
-      const value = inputs[key].value;
-      const length = value.replace(/\s+/g, ' ').trim().length;
-      const limit = LIMITS[key];
-      counters[key].textContent = `${length} / ${limit}`;
-      counters[key].classList.toggle('is-limit', length >= limit);
+    function formatJson() {
+      const data = state.outputMode === 'full' ? getFullJson() : getBanner();
+      return JSON.stringify(data, null, 2);
     }
 
-    function updateUrlStatus() {
-      const ok = Boolean(safeUrl(inputs.url.value));
-      counters.url.textContent = ok ? 'OK' : 'невалидная ссылка';
-      counters.url.classList.toggle('is-limit', !ok);
-    }
-
-    function setStatus(text, type) {
-      status.textContent = text || '';
-      status.className = 'status' + (type ? ' ' + type : '');
-    }
-
-    function updateTabs() {
-      blockTab.classList.toggle('active', outputMode === 'block');
-      fileTab.classList.toggle('active', outputMode === 'file');
+    function updateCounter(name) {
+      const input = els[name];
+      const counter = document.querySelector('[data-counter="' + name + '"]');
+      const limit = LIMITS[name];
+      limitValue(input, limit);
+      counter.textContent = input.value.length + ' / ' + limit;
+      counter.classList.toggle('is-full', input.value.length >= limit);
     }
 
     function update() {
       updateCounter('tag');
       updateCounter('title');
       updateCounter('description');
-      updateUrlStatus();
 
       const banner = getBanner();
-      preview.tag.textContent = banner.tag || 'Сервис';
-      preview.title.textContent = banner.title || 'Заголовок рекламы';
-      preview.description.textContent = banner.description || 'Короткое описание предложения';
-      preview.slot.style.background = `linear-gradient(135deg, ${banner.theme.from} 0%, ${banner.theme.to} 100%)`;
+      const from = normalizeHex(els.from.value);
+      const to = normalizeHex(els.to.value);
+      const validUrl = Boolean(banner.url);
 
-      inputs.interval.value = normalizeInterval(inputs.interval.value);
-      const payload = outputMode === 'file' ? getFullConfig() : banner;
-      output.textContent = JSON.stringify(payload, null, 2);
-      updateTabs();
+      els.interval.value = String(clampInterval(els.interval.value));
+      els.fromText.textContent = from;
+      els.toText.textContent = to;
+      els.urlState.textContent = validUrl ? 'OK' : 'URL?';
+      els.urlState.classList.toggle('is-full', !validUrl);
 
-      if (!banner.title && !banner.description) {
-        setStatus('Добавьте title или description, иначе баннер не попадёт в ротацию.', 'bad');
-      } else if (!banner.url) {
-        setStatus('Ссылка пустая или невалидная: баннер покажется, но клик никуда не поведёт.', 'bad');
-      } else {
-        setStatus('JSON готов к вставке.', 'ok');
+      els.preview.style.backgroundColor = from;
+      els.preview.style.backgroundImage = 'linear-gradient(105deg, ' + from + ' 0%, ' + to + ' 100%)';
+      els.previewTag.textContent = banner.tag;
+      els.previewTitle.textContent = banner.title || 'Заголовок';
+      els.previewDesc.textContent = banner.description || 'Описание баннера';
+      els.output.textContent = formatJson();
+      els.status.textContent = validUrl ? 'JSON готов к вставке.' : 'Проверь URL перед публикацией.';
+      els.status.classList.toggle('is-error', !validUrl);
+    }
+
+    async function copyOutput() {
+      const text = els.output.textContent;
+      try {
+        await navigator.clipboard.writeText(text);
+        els.status.textContent = 'Скопировано.';
+        els.status.classList.remove('is-error');
+      } catch (error) {
+        const helper = document.createElement('textarea');
+        helper.value = text;
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand('copy');
+        helper.remove();
+        els.status.textContent = 'Скопировано.';
+        els.status.classList.remove('is-error');
       }
     }
 
-    Object.values(inputs).forEach((input) => {
+    function downloadJson() {
+      const blob = new Blob([JSON.stringify(getFullJson(), null, 2) + '\n'], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'ads.json';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      els.status.textContent = 'ads.json скачан.';
+      els.status.classList.remove('is-error');
+    }
+
+    document.querySelectorAll('input, textarea').forEach(function (input) {
       input.addEventListener('input', update);
       input.addEventListener('change', update);
     });
 
-    document.querySelectorAll('.preset').forEach((button) => {
-      button.addEventListener('click', () => {
-        inputs.from.value = button.dataset.from;
-        inputs.to.value = button.dataset.to;
+    document.querySelectorAll('.chip').forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        els.from.value = chip.dataset.from;
+        els.to.value = chip.dataset.to;
         update();
       });
     });
 
-    blockTab.addEventListener('click', () => {
-      outputMode = 'block';
-      update();
+    document.querySelectorAll('.tab').forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        state.outputMode = tab.dataset.output;
+        document.querySelectorAll('.tab').forEach(function (item) {
+          item.classList.toggle('is-active', item === tab);
+        });
+        update();
+      });
     });
 
-    fileTab.addEventListener('click', () => {
-      outputMode = 'file';
-      update();
-    });
-
-    document.getElementById('copyBtn').addEventListener('click', async () => {
-      try {
-        await navigator.clipboard.writeText(output.textContent);
-        setStatus('Скопировано.', 'ok');
-      } catch (error) {
-        setStatus('Не удалось скопировать. Выделите JSON вручную.', 'bad');
-      }
-    });
-
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      const blob = new Blob([output.textContent + '\n'], { type: 'application/json;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = outputMode === 'file' ? 'ads.json' : 'ksl-banner.json';
-      a.click();
-      URL.revokeObjectURL(url);
-      setStatus('JSON скачан.', 'ok');
-    });
+    els.copyBtn.addEventListener('click', copyOutput);
+    els.downloadBtn.addEventListener('click', downloadJson);
 
     update();
   </script>
